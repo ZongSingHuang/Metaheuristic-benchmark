@@ -37,3 +37,73 @@ https://qiita.com/tomitomi3/items/d4318bf7afbc1c835dda#ackley-function
 https://en.wikipedia.org/wiki/Test_functions_for_optimization
 
 https://www.cs.unm.edu/~neal.holts/dga/benchmarkFunction/index.html
+
+01_Adaptive Particle Swarm Optimization
+
+02_A novel bee swarm optimization algorithm for numerical function optimization
+
+03_Chaos-enhanced accelerated particle swarm optimization
+
+04_Experimental Analysis of Bound Handling Techniques in Particle Swarm Optimization
+
+05_Biogeography-based optimisation with chaos
+
+06_Grey Wolf Optimizer
+
+07_The Whale Optimization Algorithm
+
+08_Hybrid Algorithm of Particle Swarm Optimization and Grey Wolf Optimizer for Improving Convergence Performance
+
+09_Lévy Flight Trajectory-Based Whale Optimization Algorithm for Global Optimization
+
+10_Chaotic whale optimization algorithm
+
+11_一种改进的鲸鱼优化算法
+
+12_A hyper-heuristic for improving the initial population of whale optimization algorithm
+
+13_An efficient double adaptive random spare reinforced whale optimization algorithm
+
+14_An enhanced associative learning-based exploratory whale optimizer for global optimization
+
+15_An Enhanced Whale Optimization Algorithm with Simplex Method
+
+16_Chaotic particle swarm optimization with sigmoid-based acceleration coefficients for numerical function optimization
+
+17_New binary whale optimization algorithm for discrete optimization problems
+
+18_改进的鲸鱼优化算法及其应用
+
+19_基于自适应权重和模拟退火的鲸鱼优化算法
+
+20_基于改进型鲸鱼优化算法和最小二乘支持向量机的炼钢终点预测模型研究
+
+21_精英反向黄金正弦鲸鱼算法及其工程优化研究
+
+22_Enhanced whale optimization algorithm for maximum power point tracking of variable-speed wind generators
+
+23_Improved Whale Optimization Algorithm applied to design PID plus second-order derivative controller for automatic voltage regulator system
+
+24_Improved Whale Optimization Algorithm Based on Nonlinear Adaptive Weight and Golden Sine Operator
+
+25_Multi-Strategy Ensemble Whale Optimization Algorithm and Its Application to Analog Circuits Intelligent Fault Diagnosis
+
+26_Opposition based competitive grey wolf optimizer for EMG feature
+
+27_一种离散鲸鱼算法及其应用
+
+28 I-GWO and Ex-GWO improved algorithms of the Grey Wolf Optimizer to solve global optimization problems
+
+29_A novel enhanced whale optimization algorithm for global optimization
+
+30_Improved Whale Optimization Algorithm for Solving Constrained Optimization Problems
+
+31_Nature-inspired approach An enhanced whale optimization algorithm for global optimization
+
+32_A new mutation operator for real coded genetic algorithms
+
+33_A new crossover operator for real coded genetic algorithms
+
+34_An Efficient Real-coded Genetic Algorithm for RealParameter Optimization
+
+35_An new crossover operator for real-coded genetic algorithm with selective breeding based on difference between individuals
