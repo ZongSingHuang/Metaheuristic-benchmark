@@ -20,7 +20,7 @@
 
 # 3. 參考文獻:
 
-https://arxiv.org/abs/1308.4008  -> Xin-She Yang函數的作者整理
+https://arxiv.org/abs/1308.4008  -> Xin-She Yang函數，同時也是Bat Algorithm的作者整理
 
 http://benchmarkfcns.xyz/fcns  -> Mazhar Ansari Ardeh
 
