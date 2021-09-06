@@ -40,6 +40,8 @@ https://www.cs.unm.edu/~neal.holts/dga/benchmarkFunction/index.html  -> Universi
 
 A Numerical Evaluation of Several Stochastic Algorithms on Selected Continuous Global Optimization Test Problems
 
+Some New Test Functions for Global Optimization and Performance of Repulsive Particle Swarm Method
+
 01_Adaptive Particle Swarm Optimization
 
 02_A novel bee swarm optimization algorithm for numerical function optimization
