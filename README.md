@@ -38,6 +38,8 @@ https://en.wikipedia.org/wiki/Test_functions_for_optimization
 
 https://www.cs.unm.edu/~neal.holts/dga/benchmarkFunction/index.html  -> University of New Mexico 實驗室整理
 
+A Numerical Evaluation of Several Stochastic Algorithms on Selected Continuous Global Optimization Test Problems
+
 01_Adaptive Particle Swarm Optimization
 
 02_A novel bee swarm optimization algorithm for numerical function optimization
