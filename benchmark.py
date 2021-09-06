@@ -92,7 +92,7 @@ def Adjiman(X):
     return F
 
 def Alpine1(X):
-    # X in [0, 10]
+    # X in [-10, 10]
     # X* = [0, 0, ..., 0]
     # F* = 0
     if X.ndim==1:
@@ -497,7 +497,7 @@ def Ellipsoidal(X):
     if X.ndim==1:
         X = X.reshape(1, -1)
     D = X.shape[1]
-    L = np.arange(D)
+    L = np.arange(D) + 1
     
     F = np.sum( (X-L)**2, axis=1 )
     
@@ -824,7 +824,7 @@ def Leon(X):
     
     return F
 
-def Levi13(X):
+def Levy(X):
     # X in [-10, 10], D fixed 2
     # X* = [1, 1]
     # F* = 0
@@ -973,7 +973,7 @@ def Noncontinuous_Rastrigin(X):
 
 def Paviani(X):
     # X in [2, 10], D fixed 10
-    # X* = [9.351, 9.351, ..., 9.351]
+    # X* = [9.35027, 9.35027, ..., 9.35027]
     # F* = -45.77848
     if X.ndim==1:
         X = X.reshape(1, -1)
@@ -1205,7 +1205,7 @@ def Salomon(X):
     
     return F
 
-def Schaffer1(X):
+def Schaffer_F1(X):
     # X in [-100, 100], D fixed 2
     # X* = [0, 0]
     # F* = 0
@@ -1219,7 +1219,7 @@ def Schaffer1(X):
     
     return F
 
-def Schaffer2(X):
+def Schaffer_F2(X):
     # X in [-100, 100], D fixed 2
     # X* = [0, 0]
     # F* = 0
@@ -1233,7 +1233,7 @@ def Schaffer2(X):
     
     return F
 
-def Schaffer3(X):
+def Schaffer_F3(X):
     # X in [-100, 100], D fixed 2
     # X* = [±1.253114962205510, 0] or [0, ±1.253114962205510]
     # F* = 0.001566854526004
@@ -1247,7 +1247,7 @@ def Schaffer3(X):
     
     return F
 
-def Schaffer4(X):
+def Schaffer_F4(X):
     # X in [-100, 100], D fixed 2
     # X* = [±1.253114962205510, 0] or [0, ±1.253114962205510]
     # F* = 0.292578632035980
@@ -1260,8 +1260,8 @@ def Schaffer4(X):
     F = 0.5 + ((np.cos(np.sin(np.abs(X1**2-X2**2))))**2 - 0.5)/(1+0.001*(X1**2+X2**2))**2
     
     return F
-	
-def Schaffer6(X):
+
+def Schaffer_F6(X):
     # X in [-100, 100], D fixed 2
     # X* = [0, 0]
     # F* = 0
@@ -1275,7 +1275,7 @@ def Schaffer6(X):
     
     return F
 
-def Schaffer7(X):
+def Schaffer_F7(X):
     # X in [-100, 100]
     # X* = [0, 0, ..., 0]
     # F* = 0
@@ -1285,6 +1285,30 @@ def Schaffer7(X):
     
     si = ( (X[:, :-1]**2 + X[:, 1:]**2)**0.5 ).flatten()
     F = 1/(D-1) * si**0.5 * (np.sin(50*si**0.2))**2
+    
+    return F
+
+def Schwefel12(X):
+    # Schwefel 1.2, Rotated Hyper-Ellipsoid, Double-Sum
+    # X in [-100, 100]
+    # X* = [0, 0, ..., 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    F = np.sum( np.cumsum(X, axis=1), axis=1)
+    
+    return F
+
+def Schwefel220(X):
+    # Schwefel 2.20
+    # X in [-1, 1]
+    # X* = [0, 0, ..., 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    F = np.sum(np.abs(X), axis=1 )
     
     return F
 
@@ -1312,18 +1336,6 @@ def Schwefel222(X):
     
     return F
 
-def Schwefel12(X):
-    # Schwefel 1.2, Rotated Hyper-Ellipsoid, Double-Sum
-    # X in [-100, 100]
-    # X* = [0, 0, ..., 0]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    
-    F = np.sum( np.cumsum(X, axis=1), axis=1)
-    
-    return F
-
 def Schwefel223(X):
     # Schwefel 2.23
     # X in [-10, 10]
@@ -1346,18 +1358,6 @@ def Schwefel226(X):
     D = X.shape[1]
     
     F = 418.9828872724339*D - np.sum(X * np.sin( np.abs(X)**0.5 ), axis=1 )
-    
-    return F
-
-def Schwefel6(X):
-    # Schwefel 2.20
-    # X in [-100, 100]
-    # X* = [0, 0, ..., 0]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    
-    F = np.sum(np.abs(X), axis=1 )
     
     return F
 
@@ -1455,7 +1455,7 @@ def Sinusoidal(X):
 
 def Six_Hump_Camel_Back(X):
     # X in [-5, 5], D fixed 2
-    # X* = (±0.08984201368301331,±0.7126564032704135)
+    # X* = [-0.08984201368301331, 0.7126564032704135] or [0.08984201368301331, -0.7126564032704135]
     # F* = -1.031628453489877
     if X.ndim==1:
         X = X.reshape(1, -1)
@@ -1469,7 +1469,7 @@ def Six_Hump_Camel_Back(X):
 
 def Sphere(X):
     # Spherical Contours, Square Sum, Harmonic, De_Jong1 or Schumer-Steiglitz1
-    # X in [-5.12, 5.12]
+    # X in [-100, 100]
     # X* = [0, 0, ..., 0]
     # F* = 0
     if X.ndim==1:
@@ -1535,7 +1535,7 @@ def Styblinski_Tang(X):
     return F
 
 def Sum_of_different_power(X):
-    # X in [-1, 1]
+    # X in [-100, 100]
     # X* = [0, 0, ..., 0]
     # F* = 0
     if X.ndim==1:
@@ -1549,7 +1549,7 @@ def Sum_of_different_power(X):
 
 def Sum_Squares(X):
     # Axis parallel hyper-ellipsoid, Weighted Sphere, hyper ellipsodic
-    # X in [-5.12, 5.12]
+    # X in [-10, 10]
     # X* = [0, 0, ..., 0]
     # F* = 0
     if X.ndim==1:
@@ -1655,7 +1655,7 @@ def Xin_She_Yang2(X):
     return F
 
 def Xin_She_Yang3(X):
-    # X in [-2pi, 2pi]
+    # X in [-20, 20]
     # X* = [0, 0, ..., 0]
     # F* = -1
     if X.ndim==1:
@@ -1679,7 +1679,7 @@ def Xin_She_Yang4(X):
     return F
 
 def Zakharov(X):
-    # X in [-5.12, 5.12]
+    # X in [-5, 10]
     # X* = [0, 0, ..., 0]
     # F* = 0
     if X.ndim==1:
@@ -1692,7 +1692,7 @@ def Zakharov(X):
     return F
 
 def Zettl(X):
-    # X in [-1, 5], D fixed 2
+    # X in [-5, 10], D fixed 2
     # X* = [-0.02989597760285287, 0]
     # F* = -0.003791237220468656
     if X.ndim==1:
