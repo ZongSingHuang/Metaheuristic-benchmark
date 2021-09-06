@@ -20,23 +20,23 @@
 
 # 3. 參考文獻:
 
-http://infinity77.net/global_optimization/genindex.html
+https://arxiv.org/abs/1308.4008  -> Xin-She Yang函數的作者整理
 
-http://benchmarkfcns.xyz/fcns
+http://benchmarkfcns.xyz/fcns  -> Mazhar Ansari Ardeh
 
-https://www.al-roomi.org/benchmarks
+https://www.al-roomi.org/benchmarks  -> University of Bahrain 實驗室整理
 
-https://www.sfu.ca/~ssurjano/optimization.html
+https://www.sfu.ca/~ssurjano/optimization.html  -> Simon Fraser University 實驗室整理
 
 http://www-optima.amp.i.kyoto-u.ac.jp/member/student/hedar/Hedar_files/TestGO_files/Page364.htm
 
-https://www.indusmic.com/blog/categories/benchmark-function
+https://www.indusmic.com/blog/categories/benchmark-function  -> Kyoto University 實驗室整理
 
-https://qiita.com/tomitomi3/items/d4318bf7afbc1c835dda#ackley-function
+https://qiita.com/tomitomi3/items/d4318bf7afbc1c835dda#ackley-function  -> tomitomi3
 
 https://en.wikipedia.org/wiki/Test_functions_for_optimization
 
-https://www.cs.unm.edu/~neal.holts/dga/benchmarkFunction/index.html
+https://www.cs.unm.edu/~neal.holts/dga/benchmarkFunction/index.html  -> University of New Mexico 實驗室整理
 
 01_Adaptive Particle Swarm Optimization
 
