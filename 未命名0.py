@@ -7,18 +7,20 @@ Created on Tue Sep  7 11:08:21 2021
 
 import numpy as np
 
-def Zilinskas_N3(X):
+def Camel(X):
     # [1]
-    # X in [0, 100], D fixed 1
-    # X* = 3PI/2 + 2PI = [10.995574287564276]
-    # F* = -1
+    # X in [-2,-2], D fixed 2
+    # X* = [-1.5, 0], [1.5, 0]
+    # F* = 0
     if X.ndim==1:
         X = X.reshape(1, -1)
+
     X1 = X[:, 0]
+    X2 = X[:, 1]
     
-    F = np.sin(X1)
+    F = -(-X1**4+4.5*X1**2+2)/np.exp(2*X2**2)
     
     return F
 
-X = np.zeros([5, 1]) + 10.995574287564276
-F = Zilinskas_N3(X)
+X = np.zeros([5, 2]) + [1.5, 0]
+F = Camel(X)

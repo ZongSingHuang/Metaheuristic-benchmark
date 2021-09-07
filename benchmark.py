@@ -12,6 +12,10 @@ Created on Thu Aug 26 15:01:28 2021
 
 import numpy as np
 
+#%%
+# =============================================================================
+# 1-D
+# =============================================================================
 def BirdLike(X):
     # [1]
     # X in [-4, 4], D fixed 1
@@ -671,6 +675,287 @@ def Zilinskas_N3(X):
     
     return F
 
+#%%
+# =============================================================================
+# 2-D
+# =============================================================================
+def Adjiman(X):
+    # [1]
+    # X in [-5, 5], D fixed 2
+    # X* = [5, 0]
+    # F* = -5
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = np.cos(X1)*np.sin(X2) - X1/(X2**2+1)
+    
+    return F
+
+def AluffiPentini(X):
+    # [1]
+    # Zirilli's Function
+    # X in [-10, 10], D fixed 2
+    # X* = [-1.046680576580755, 0]
+    # F* = -0.352386073800034
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = 0.25*X1**4 -0.5*X1**2 + 0.1*X1 + 0.5*X2**2
+    
+    return F
+
+def BananaShape(X):
+    # [1]
+    # X in [-1.5, 1.5], D fixed 2
+    # X* = [0, 0]
+    # F* = -25
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = 10*( (X1+1)**2 - (X2+1)**2 ) + X1**2 + 4
+    F = -100/F
+    
+    return F
+
+def BartelsConn(X):
+    # [1]
+    # X in [-500, 500], D fixed 2
+    # X* = [0, 0]
+    # F* = 1
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = np.abs(X1**2+X2**2+X1*X2) + np.abs(np.sin(X1)) + np.abs(np.cos(X2))
+    
+    return F
+
+def Beale(X):
+    # [1]
+    # X in [-4.5, 4.5], D fixed 2
+    # X* = [3, 0.5]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = (1.5-X1+X1*X2)**2 + (2.25-X1+X1*X2**2)**2 + (2.625-X1+X1*X2**3)**2
+    
+    return F
+
+def BiggsEXP2(X):
+    # [1]
+    # X in [0, 20], D fixed 2
+    # X* = [1, 10]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    P = X.shape[0]
+    F = np.zeros(P)
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    L = np.arange(9) + 1
+    
+    for i in range(P):
+        F[i] = np.sum( (np.exp(-L*X1[i]/10) -5*np.exp(-L*X2[i]/10) - np.exp(-L/10) + 5*np.exp(-L))**2 )
+    
+    return F
+
+def Bird(X):
+    # [1]
+    # X in [-2PI, PI], D fixed 2
+    # X* = [4.701055751981055, 3.152946019601391], [-1.582142172055011,-3.130246799635430]
+    # F* = -106.7645367198034
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = (X1-X2)**2 + np.sin(X1)*np.e**((1-np.cos(X2))**2) + np.cos(X2)*np.e**((1-np.sin(X1))**2)
+    
+    return F
+
+def Bohachevsky1(X):
+    # [1]
+    # X in [-50, 50], D fixed 2
+    # X* = [0, 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = X1**2 + 2*X2**2 - 0.3*np.cos(3*np.pi*X1) - 0.4*np.cos(4*np.pi*X2) + 0.7
+    
+    return F
+
+def Bohachevsky2(X):
+    # [1]
+    # X in [-50, 50], D fixed 2
+    # X* = [0, 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = X1**2 + 2*X2**2 - 0.3*np.cos(3*np.pi*X1)*np.cos(4*np.pi*X2) + 0.3
+    
+    return F
+
+def Bohachevsky3(X):
+    # [1]
+    # X in [-50, 50], D fixed 2
+    # X* = [0, 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = X1**2 + 2*X2**2 - 0.3*np.cos(3*np.pi*X1+4*np.pi*X2) + 0.3
+    
+    return F
+
+def Booth(X):
+    # [1]
+    # X in [-10, 10], D fixed 2
+    # X* = [1, 3]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = (X1+2*X2-7)**2 + (2*X1+X2-5)**2
+    
+    return F
+
+def Branin_N1(X):
+    # [1]
+    # X1 in [-5, 10], X2 in [0, 15], D fixed 2
+    # X* = [-PI, 12.275], [PI, 2.275], [9.42478, 2.475]
+    # F* = 0.39788735772973816
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    first = ( X2 - 5.1*X1**2/(4*np.pi**2) + 5*X1/np.pi - 6 )**2
+    second = 10 * (1 - 1/(8*np.pi)) * np.cos(X1)
+    third  = 10
+    F = first + second + third
+    
+    return F
+
+def Branin_N2(X):
+    # [1]
+    # X1 in [-5, 10], X2 in [0, 15], D fixed 2
+    # X* = [-3.196988423389338, 12.526257883092258]
+    # F* = -0.179891239069905
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    a = 1
+    b = 5.1/(4*np.pi**2)
+    c = 5/np.pi
+    d = 6
+    e = 10
+    g = 1/(8*np.pi)
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    f1 = a * ( X2-b*X1**2+c*X1-d )**2
+    f2 = e * (1-g) * np.cos(X1) *np.cos(X2)
+    f3  = np.log( X1**2+X2**2+1 )
+    
+    F = f1 + f2 + f3 + e
+    F = -1/F
+    
+    return F
+
+def Brent(X):
+    # [1]
+    # X in [-10, 10], D fixed 2
+    # X* = [-10, -10]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = (X1+10)**2 + (X2+10)**2 + np.exp(-X1**2-X2**2)
+    
+    return F
+
+def Bukin_N4(X):
+    # [1]
+    # X1 in [-15,-5], X2 in [-3, 3], D fixed 2
+    # X* = [-10, 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = 100*X2**2 + 0.01*np.abs(X1+10)
+    
+    return F
+
+def Bukin_N6(X):
+    # [1]
+    # X1 in [-15,-5], X2 in [-3, 3], D fixed 2
+    # X* = [-10, 1]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = 100*np.sqrt(np.abs(X2-0.01*X1**2)) + 0.01*np.abs(X1+10)
+    
+    return F
+
+def Camel(X):
+    # [1]
+    # X in [-2,-2], D fixed 2
+    # X* = [-1.5, 0], [1.5, 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = -(-X1**4+4.5*X1**2+2)/np.exp(2*X2**2)
+    
+    return F
+
+
+
+
+
 
 
 
@@ -738,19 +1023,7 @@ def Ackley4(X):
     
     return F
 
-def Adjiman(X):
-    # X in [(-1, 2), (-1, 1)] or X in [-5, 5]
-    # X* = [x1的最大值, 0]
-    # F* = x1的最大值
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-        
-    X1 = X[:, 0]
-    X2 = X[:, 1]
-    
-    F = np.cos(X1)*np.sin(X2) - X1/(X2**2+1)
-    
-    return F
+
 
 def Alpine1(X):
     # X in [-10, 10]
@@ -774,134 +1047,19 @@ def Alpine2(X):
     
     return F
 
-def Bartels_Conn(X):
-    # X in [-500, 500], D fixed 2
-    # X* = [0, 0]
-    # F* = 1
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    
-    X1 = X[:, 0]
-    X2 = X[:, 1]
-    
-    F = np.abs(X1**2+X2**2+X1*X2) + np.abs(np.sin(X1)) + np.abs(np.cos(X2))
-    
-    return F
 
-def Beale(X):
-    # X in [-4.5, 4.5], D fixed 2
-    # X* = [3, 0.5]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    
-    X1 = X[:, 0]
-    X2 = X[:, 1]
-    
-    F = (1.5-X1+X1*X2)**2 + (2.25-X1+X1*X2**2)**2 + (2.625-X1+X1*X2**3)**2
-    
-    return F
 
-def Bird(X):
-    # X in [-2pi, 2pi], D fixed 2
-    # X* = [4.701055751981055, 3.152946019601391] or [-1.582142172055011,-3.130246799635430]
-    # F* = -106.764
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    
-    X1 = X[:, 0]
-    X2 = X[:, 1]
-    
-    F = (X1-X2)**2 + np.sin(X1)*np.e**((1-np.cos(X2))**2) + np.cos(X2)*np.e**((1-np.sin(X1))**2)
-    
-    return F
 
-def Bohachevsky1(X):
-    # X in [-100, 100], D fixed 2
-    # X* = [0, 0]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
 
-    X1 = X[:, 0]
-    X2 = X[:, 1]
-    
-    F = X1**2 + 2*X2**2 - 0.3*np.cos(3*np.pi*X1) - 0.4*np.cos(4*np.pi*X2) + 0.7
-    
-    return F
 
-def Bohachevsky2(X):
-    # X in [-100, 100], D fixed 2
-    # X* = [0, 0]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
 
-    X1 = X[:, 0]
-    X2 = X[:, 1]
-    
-    F = X1**2 + 2*X2**2 - 0.3*np.cos(3*np.pi*X1)*np.cos(4*np.pi*X2) + 0.3
-    
-    return F
 
-def Bohachevsky3(X):
-    # X in [-100, 100], D fixed 2
-    # X* = [0, 0]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
 
-    X1 = X[:, 0]
-    X2 = X[:, 1]
-    
-    F = X1**2 + 2*X2**2 - 0.3*np.cos(3*np.pi*X1+4*np.pi*X2) + 0.3
-    
-    return F
 
-def Booth(X):
-    # X in [-10, 10], D fixed 2
-    # X* = [1, 3]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
 
-    X1 = X[:, 0]
-    X2 = X[:, 1]
-    
-    F = (X1+2*X2-7)**2 + (2*X1+X2-5)**2
-    
-    return F
 
-def Branin(X):
-    # X in [(-5, 10), (0, 15)], D fixed 2
-    # X* = [-pi, 12.275] or [pi, 2.275] or [9.42478, 2.475]
-    # F* = 0.39788735772973816
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    
-    X1 = X[:, 0]
-    X2 = X[:, 1]
-    
-    first = ( X2 - 5.1*X1**2/(4*np.pi**2) + 5*X1/np.pi - 6 )**2
-    second = 10 * (1 - 1/(8*np.pi)) * np.cos(X1)
-    third  = 10
-    F = first + second + third
-    
-    return F
 
-def Brent(X):
-    # X in [-10, 10], D fixed 2
-    # X* = [-10, -10]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
 
-    X1 = X[:, 0]
-    X2 = X[:, 1]
-    
-    F = (X1+10)**2 + (X2+10)**2 + np.exp(-X1**2-X2**2)
-    
-    return F
 
 def Brown(X):
     # X in [-1, 4]
@@ -914,33 +1072,9 @@ def Brown(X):
     
     return F
 
-def Bukin4(X):
-    # X in [(-15,-5), (-3, 3)], D fixed 2
-    # X* = [-10, 0]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    
-    X1 = X[:, 0]
-    X2 = X[:, 1]
-    
-    F = 100*X2**2 + 0.01*np.abs(X1+10)
-    
-    return F
 
-def Bukin6(X):
-    # X in [(-15,-5), (-3, 3)], D fixed 2
-    # X* = [-10, 1]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
 
-    X1 = X[:, 0]
-    X2 = X[:, 1]
-    
-    F = 100*np.sqrt(np.abs(X2-0.01*X1**2)) + 0.01*np.abs(X1+10)
-    
-    return F
+
 
 def Chung_Reynolds(X):
     # X in [-100, 100]
