@@ -11,6 +11,7 @@ Created on Thu Aug 26 15:01:28 2021
 # [2] http://infinity77.net/global_optimization/genindex.html
 # [3] https://opytimark.readthedocs.io/en/latest/api/opytimark.markers.html
 # [4] https://www.sfu.ca/~ssurjano/optimization.html
+# [5] A Literature Survey of Benchmark Functions For Global Optimization Problems
 # =============================================================================
 
 import numpy as np
@@ -1370,7 +1371,7 @@ def ShekelFoxholes(X):
 def Six_Hump_Camel_Back(X):
     # [1]
     # X in [-5, 5], D fixed 2
-    # X* = [-0.08984201368301331, 0.7126564032704135] or [0.08984201368301331, -0.7126564032704135]
+    # X* = [-0.08984201368301331, 0.7126564032704135], [0.08984201368301331, -0.7126564032704135]
     # F* = -1.031628453489877
     if X.ndim==1:
         X = X.reshape(1, -1)
@@ -1381,6 +1382,157 @@ def Six_Hump_Camel_Back(X):
     F = 4*X1**2 - 2.1*X1**4 + X1**6/3 + X1*X2 - 4*X2**2 + 4*X2**4
     
     return F
+
+def Stenger(X):
+    # [1]
+    # X in [-1, 4], D fixed 2
+    # X* = [0, 0], [1.695415196279268, 0.718608171943623]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = (X1**2-4*X2)**2 + (X2**2-2*X1+4*X2)**2
+    
+    return F
+
+def Storn(X, m=1):
+    # [1]
+    # X(m=1) in [-2, 2], X(m=2) in [-4, 4], X(m=3) in [-8, 8], D fixed 2
+    # X*(m=1) = [0, ±1.386952327146511], X*(m=2) = [0, ±2.608906424592038], X*(m=3) = [0, ±4.701739810796703]
+    # F*(m=1) = -0.407461605632581, F*(m=2) = -18.058696657349238, F*(m=3) = -227.7657499670953
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = 10**m*X1**2 + X2**2 - (X1**2+X2**2)**2 + 10**-m*(X1**2+X2**2)**4
+    
+    return F
+
+def TestTubeHolder(X):
+    # [1]
+    # X in [-1, 4], D fixed 2
+    # X* = [-PI/2, 0]
+    # F* = -10.872299901558
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    f1 = np.exp( np.abs( np.cos( (X1**2+X2**2)/200 ) ) )
+    f2 = np.abs( np.sin(X1)*np.cos(X2)*f1 )
+    F = -4 * f2
+    
+    return F
+
+def ThreeCylinders(X):
+    # [1]
+    # X in [0, 5], D fixed 2
+    # X* = ?
+    # F* = -1.05
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    P = X.shape[0]
+    F = np.zeros([P])
+    
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    r1 = ( (X1-3)**2 + (X2-2)**2 )**0.5
+    r2 = ( (X1-4)**2 + (X2-4)**2 )**0.5
+    r3 = ( (X1-1)**2 + (X2-3)**2 )**0.5
+    
+    mask1 = r1>=0.75
+    mask2 = r2>=0.375
+    mask3 = r3>=0.375
+    
+    F[mask1] = 1
+    F[mask2] = 1.05
+    F[mask3] = 1.05
+    
+    return -F
+
+def ThreeHumpCamelBack(X):
+    # [1]
+    # X in [-5, 5], D fixed 2
+    # X* = [0, 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = 2*X1 - 1.05*X2**4 + X1**6/6 + X1*X2 + X2**2
+    
+    return F
+
+def Treccani(X):
+    # [1]
+    # X in [-5, 5], D fixed 2
+    # X* = [0, 0], [-2, 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = X1**4 + 4*X1**3 + 4*X1**2 + X2**2
+    
+    return F
+
+def Trefethen(X):
+    # [1]
+    # X1 in [-6.5, 6.5], X2 in [-4.5, 4.5], D fixed 2
+    # X* = [-0.02440307923, 0.2106124261]
+    # F* = -3.3068686474
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = np.exp(np.sin(50*X1)) + np.sin(60*np.exp(X2)) + np.sin(70*np.sin(X1)) + np.sin(np.sin(80*X2)) - np.sin(10*(X1+X2)) + 0.25*(X1**2+X2**2)
+    
+    return F
+
+def Tripod(X):
+    # [1]
+    # X in [-100, 100], D fixed 2
+    # X* = [0, -50]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    p1 = ( X[:, 0]>=0 )*1
+    p2 = ( X[:, 1]>=0 )*1
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = p2*(1+p1) + np.abs( X1+50*p2*(1-2*p1) ) + np.abs( X2+50*(1-2*p2) )
+    
+    return F
+
+def Tsoulos(X):
+    # [1]
+    # X in [-1, 1], D fixed 2
+    # X* = [0, 0]
+    # F* = -2
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = X1**2 + X2**2 - np.cos(18*X1) - np.cos(18*X2)
+    
+    return F
+
 
 
 
@@ -2590,19 +2742,7 @@ def Tablet(X):
     
     return F
 
-def Three_Hump_Camel(X):
-    # X in [-5, 5], D fixed 2
-    # X* = [0, 0]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
 
-    X1 = X[:, 0]
-    X2 = X[:, 1]
-    
-    F = 2*X1 - 1.05*X2**4 + X1**6/6 + X1*X2 + X2**2
-    
-    return F
 
 def Trid(X):
     # X in [-D**2, D**2]
