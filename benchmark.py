@@ -1533,10 +1533,157 @@ def Tsoulos(X):
     
     return F
 
+def Ursem_N1(X):
+    # [1]
+    # X1 in [-2.5, 3], X2 in [-2, 2], D fixed 2
+    # X* = [1.697136443570341, 0]
+    # F* = -4.816814063734823
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = -np.sin(2*X1-0.5*np.pi) - 3*np.cos(X2) - 0.5*X1
+    
+    return F
 
+def Ursem_N3(X):
+    # [1]
+    # X1 in [-2, 2], X2 in [-1.5, 1.5], D fixed 2
+    # X* = [0, 0]
+    # F* = -2.5
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = -(3-np.abs(X1))/2 * (2-np.abs(X2))/2 * np.sin(2.2*np.pi*X1+0.5*np.pi) - (2-np.abs(X1))/2 * (2-np.abs(X2))/2 * np.sin(0.5*np.pi*X2**2+0.5*np.pi)
+    
+    return F
 
+def Ursem_N4(X):
+    # [1]
+    # X in [-2, 2], D fixed 2
+    # X* = [0, 0]
+    # F* = -1.5
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = -3*np.sin(0.5*np.pi*X1+0.5*np.pi) * (2-(X1**2+X2**2)**0.5)/4
+    
+    return F
 
+def UrsemWaves(X):
+    # [1]
+    # X1 in [-0.9, 1.2], X2 in [-1.2, 1.2], D fixed 2
+    # X* = [-0.605689494589848, -1.177561933039789]
+    # F* = -7.306998731324462
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = -(0.3*X1)**3 + (X2**2-4.5*X2**2)*X1*X2 + 4.7*np.cos( 3*X1-X2**2*(2+X1) ) * np.sin(2.5*np.pi*X1)
+    
+    return F
 
+def VenterandSobiezcczanskiSobieski(X):
+    # [1]
+    # X in [-50, 10], D fixed 2
+    # X* = [0, 0]
+    # F* = 1000
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = X1**2 - 100*np.cos(X1)**2 - 100*np.cos(X1**2/30) + X2**2 - 100*np.cos(X2)**2 - 100*np.cos(X2**2/30) + 1400
+    
+    return F
+
+def WayburnSeader_N1(X):
+    # [1]
+    # X in [-500, 500], D fixed 2
+    # X* = [1, 2], [1.596804153876933, 0.806391692246134]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = (X1**6+X2**4-17)**2 + (2*X1+X2-4)**2
+    
+    return F
+
+def WayburnSeader_N2(X):
+    # [1]
+    # X in [-500, 500], D fixed 2
+    # X* = [0.200138974728779, 1], [0.424861025271221, 1]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = ( 1.613 - 4*(X1-0.3125)**2 - 4*(X2-1.625)**2 )**2 + (X2-1)**2
+    
+    return F
+
+def WayburnSeader_N3(X):
+    # [1]
+    # X in [-500, 500], D fixed 2
+    # X* = [5.146896745324582, 6.839589743000071]
+    # F* = 19.105879794567979
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = 2*X1**3/3 - 8*X1**2 + 33*X1 - X1*X2 + 5 + ( (X1-4)**2 + (X2-5)**2 - 4 )**2
+    
+    return F
+
+def XinSheYang_N4(X, K=10):
+    # [1]
+    # X in [-1, 5], D fixed 2
+    # X* = [-0.02989597760285287, 0]
+    # F* = -0.003791237220468656
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    i = np.tile(np.arange(K)+1, K).reshape(K, K)
+    j = np.arange(K) + 1
+    
+    F = -5*np.exp( -b * ( (X1-np.pi)**2 + (X2-np.pi)**2 ) ) - 
+    
+    return F
+
+def Zettl(X):
+    # [1]
+    # X in [-1, 5], D fixed 2
+    # X* = [-0.02989597760285287, 0]
+    # F* = -0.003791237220468656
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = 0.25*X1 + ( X1**2 - 2*X1 + X2**2 )**2
+    
+    return F
 
 
 
@@ -2849,19 +2996,7 @@ def Zakharov(X):
     
     return F
 
-def Zettl(X):
-    # X in [-5, 10], D fixed 2
-    # X* = [-0.02989597760285287, 0]
-    # F* = -0.003791237220468656
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    
-    X1 = X[:, 0]
-    X2 = X[:, 1]
-    
-    F = 0.25*X1 + ( X1**2 - 2*X1 + X2**2 )**2
-    
-    return F
+
 
 def u(X, a, k, m):
     if X.ndim==1:

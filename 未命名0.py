@@ -7,22 +7,21 @@ Created on Tue Sep  7 11:08:21 2021
 
 import numpy as np
 
-def Tsoulos(X):
-    # [1]
-    # X in [-1, 1], D fixed 2
-    # X* = [0, 0]
-    # F* = -2
+def Zettl(X):
+    # X in [-1, 5], D fixed 2
+    # X* = [-0.02989597760285287, 0]
+    # F* = -0.003791237220468656
     if X.ndim==1:
         X = X.reshape(1, -1)
-        
+    
     X1 = X[:, 0]
     X2 = X[:, 1]
     
-    F = X1**2 + X2**2 - np.cos(18*X1) - np.cos(18*X2)
+    F = 0.25*X1 + ( X1**2 - 2*X1 + X2**2 )**2
     
     return F
 
 
 
-X = np.zeros([5, 2]) + [0, 0]
-F = Tsoulos(X)
+X = np.zeros([5, 2]) + [-0.02989597760285287, 0]
+F = Zettl(X)
