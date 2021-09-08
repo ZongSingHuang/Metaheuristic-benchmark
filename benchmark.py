@@ -1108,6 +1108,105 @@ def Peaks(X):
     
     return F
 
+def PenHolder(X):
+    # [1]
+    # X in [-11, 11], D fixed 2
+    # X* = [±9.646167671043401, ±9.646167671043401]
+    # F* = -0.9635348327265058
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = -np.exp(-1/np.abs(np.cos(X1)*np.cos(X2)*np.exp(np.abs(1-np.sqrt(X1**2+X2**2)/np.pi))))
+    
+    return F
+
+def PowellBadlyScaled(X):
+    # [1]
+    # X in [-10, 10], D fixed 2
+    # X* = [1.098*1E-5, 9.106] != [0, 9.106]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = (1E4*X1*X2-1)**2 + (np.exp(-X1)+np.exp(-X2)-1.0001)**2
+    
+    return F
+
+def Price_N1(X):
+    # Becker-Lago's Function
+    # [1]
+    # X in [-10, 10], D fixed 2
+    # X* = [±5, ±5]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = (np.abs(X1)-5)**2 + (np.abs(X2)-5)**2
+    
+    return F
+
+def Price_N2(X):
+    # Periodic Function
+    # [1]
+    # X in [-10, 10], D fixed 2
+    # X* = [0, 0]
+    # F* = 0.9
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = 1 + np.sin(X1)**2 + np.sin(X2)**2 - 0.1*np.exp(-X1**2-X2**2)
+    
+    return F
+
+def Price_N3(X):
+    # Modified Rosenbrock's or Price-Rosenbrock's Function
+    # [1]
+    # X in [-5, 5], D fixed 2
+    # X* = [1, 1], [0.341307503353524, 0.116490811845416]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = 100*(X2-X1**2)**2 + (6.4*(X2-0.5)**2-X1-0.6)**2
+    
+    return F
+
+def Price_N4(X):
+    # [1]
+    # X in [-500, 500], D fixed 2
+    # X* = [0, 0], [2, 4], [1.464352119663698, -2.506012760781662]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = (2*X1**3*X2-X2**3)**2 + (6*X1-X2**2+X2)**2
+    
+    return F
+
+
+
+
+
+
+
 
 
 
@@ -1840,16 +1939,7 @@ def Penalized2(X):
     
     return F
 
-def Periodic(X):
-    # X in [-10, 10]
-    # X* = [0, 0, ..., 0]
-    # F* = 0.9
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    
-    F = 1 + np.sum(np.sin(X)**2, axis=1) -0.1*np.exp(np.sum(X**2, axis=1))
-    
-    return F
+
 
 def Perm1(X):
     # X in [-D, D]
