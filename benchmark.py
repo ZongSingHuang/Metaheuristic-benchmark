@@ -728,13 +728,385 @@ def Hosaki(X):
     
     return F
 
+def JennrichSampson(X):
+    # [1]
+    # X in [-1, 11], D fixed 2
+    # X* = [0.25782521321500883, 0.25782521381356827]
+    # F* = 124.36218235561473896
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    P = X.shape[1]
+    F = np.zeros([P])
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    L = np.arange(10) + 1
+    
+    for i in range(P):
+        F[i] = np.sum( ( 2 + 2*L - (np.exp(L*X1[i])+np.exp(L*X2[i])) )**2 )
+    
+    return F
 
+def Judge(X):
+    # [1]
+    # X in [-10, 10], D fixed 2
+    # X* = [0.864787285816574, 1.235748499036571]
+    # F* = 16.081730132960381
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    P = X.shape[1]
+    F = np.zeros([P])
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    A = np.array([4.284, 4.149, 3.877, 0.533, 2.211,
+                  2.389, 2.145, 3.231, 1.998, 1.379,
+                  2.106, 1.428, 1.011, 2.179, 2.858,
+                  1.388, 1.651, 1.593, 1.046, 2.152])
+    B = np.array([0.286, 0.973, 0.384, 0.276, 0.973,
+                  0.543, 0.957, 0.948, 0.543, 0.797,
+                  0.936, 0.889, 0.006, 0.828, 0.399,
+                  0.617, 0.939, 0.784, 0.072, 0.889])
+    C = np.array([0.645, 0.585, 0.310, 0.058, 0.455,
+                  0.779, 0.259, 0.202, 0.028, 0.099,
+                  0.142, 0.296, 0.175, 0.180, 0.842,
+                  0.039, 0.103, 0.620, 0.158, 0.704])
+    
+    for i in range(P):
+        F[i] = np.sum( ( X1[i] + B*X2[i] + C*X2[i]**2 - A )**2 )
+    
+    return F
 
+def Keane(X):
+    # [1]
+    # X in [0, 10], D fixed 2
+    # X* = [1.393249070031784, 0], [0, 1.393249070031784]
+    # F* = -0.673667521146855
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = -1*np.sin(X1-X2)**2*np.sin(X1+X2)**2/(X1**2+X2**2)**0.5
+    
+    return F
 
+def Kearfott(X):
+    # [1]
+    # X in [-3, 4], D fixed 2
+    # X* = [±1.5**0.5, ±0.5**0.5] = [±1.224744871391589, ±0.7071067811865475]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = (X1**2+X2**2-2)**2 + (X1**2-X2**2-1)**2
+    
+    return F
 
+def Leon(X):
+    # [1]
+    # X in [-1.2, 1.2], D fixed 2
+    # X* = [1, 1]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = 100*(X2-X1**3)**2 + (1-X1)**2
+    
+    return F
 
+def Matyas(X):
+    # [1]
+    # X in [-10, 10], D fixed 2
+    # X* = [0, 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
 
+    X1 = X[:, 0]
+    X2 = X[:, 1]
 
+    F = 0.26*(X1**2+X2**2)-0.48*X1*X1
+    
+    return F
+
+def McCormick(X):
+    # [1]
+    # X1 in [-1.5, 4], X2 in [-3, 3], D fixed 2
+    # X* = [-0.5471975602214493, -1.547197559268372]
+    # F* = -1.913222954981037
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+
+    F = - 1.5*X1 + 2.5*X2 + (X1-X2)**2 + np.sin(X1+X2) + 1
+    
+    return F
+
+def Mineshaft_N3(X):
+    # [1]
+    # X in [-2, 2], D fixed 2
+    # X* = [0.8, 1.3]
+    # F* = -7
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+
+    F = -5 * np.exp(-1000*(X1-0.5)**2-1000*(X2-0.3)**2) - 7 * np.exp(-2000*(X1-0.8)**2-2000*(X2-1.3)**2)
+    
+    return F
+
+def Mishra_N3(X):
+    # [1]
+    # X in [-10, 10], D fixed 2
+    # X* = [-8.466613775046579, -9.998521308999999]
+    # F* = -0.184651333342989
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+
+    F = np.abs( np.cos( np.abs(X1**2+X2)**0.5 ) )**0.5 + (X1+X2)/100
+    
+    return F
+
+def Mishra_N4(X):
+    # [1]
+    # X in [-10, 10], D fixed 2
+    # X* = [-9.941127263635860, -9.999571661999983]
+    # F* = -0.199406970088833
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+
+    F = np.abs( np.sin( np.abs(X1**2+X2)**0.5 ) )**0.5 + (X1+X2)/100
+    
+    return F
+
+def Mishra_N5(X):
+    # [1]
+    # X in [-10, 10], D fixed 2
+    # X* = [-1.986820662153768, -10]
+    # F* = -1.019829519930943
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    f1 = np.sin( ( np.cos(X1)+np.cos(X2) )**2 )**2
+    f2 = np.cos( ( np.sin(X1)+np.sin(X2) )**2 )**2
+    F = (f1+f2+X1)**2 + 0.01*X1 + 0.1*X2
+    
+    return F
+
+def Mishra_N6(X):
+    # [1]
+    # X in [-10, 10], D fixed 2
+    # X* = [2.886307215440481, 1.823260331422321]
+    # F* = -2.283949838474759
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    f1 = np.sin( ( np.cos(X1)+np.cos(X2) )**2 )**2
+    f2 = np.cos( ( np.sin(X1)+np.sin(X2) )**2 )**2
+    f3 = 0.1*( (X1-1)**2 + (X2-1)**2 )
+    F = -np.log((f1-f2+X1)**2) + f3
+    
+    return F
+
+def Mishra_N8(X):
+    # Decanomial Function
+    # [1]
+    # X in [-10, 10], D fixed 2
+    # X* = [2, -3]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    f1 = X1**10 - 20*X1**9 + 180*X1**8 - 960*X1**7 + 3360*X1**6 - 8064*X1**5 + 13340*X1**4 - 15360*X1**3 + 11520*X1**2 - 5120*X1 + 2624
+    f2 = X2**4 + 12*X2**3 + 54*X2**2 +108*X2 + 81
+    F = 0.001*( np.abs(f1)+np.abs(f2) )**2
+    
+    return F
+
+def Mishra_N10a(X):
+    # SeqP Function No.01
+    # [1]
+    # X in [-10, 10], D fixed 2
+    # X* = [0, 0], [2, 2]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    f1 = X1 + X2
+    f2 = X2 * X2
+    F = ( f1 - f2 )**2
+    
+    return F
+
+def Mishra_N10b(X):
+    # SeqP Function No.02
+    # [1]
+    # X in [-10, 10], D fixed 2
+    # X* = [0, 0], [2, 2]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    f1 = X1 + X2
+    f2 = X2 * X2
+    F = np.abs( f1 - f2 )
+    
+    return F
+
+def ModifiedSchaffer_N1(X):
+    # [1]
+    # X in [-100, 100], D fixed 2
+    # X* = [0, 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = 0.5 + ( np.sin( X1**2+X2**2 )**2 - 0.5 ) / ( 1 + 0.001*( X1**2+X2**2 ) )**2
+    
+    return F
+
+def ModifiedSchaffer_N2(X):
+    # [1]
+    # X in [-100, 100], D fixed 2
+    # X* = [0, 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    f1 = np.sin( X1**2-X2**2 )**2 - 0.5
+    f2 = ( 1 + 0.001*( X1**2+X2**2 ) )**2
+    F = 0.5 + f1/f2
+    
+    return F
+
+def ModifiedSchaffer_N3(X):
+    # [1]
+    # X in [-100, 100], D fixed 2
+    # X* = [±1.253114962205510, 0] or [0, ±1.253114962205510]
+    # F* = 0.001566854526004
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    f1 = np.sin( np.cos( np.abs(X1**2-X2**2) ) )**2 - 0.5
+    f2 = ( 1 + 0.001*(X1**2+X2**2) )**2
+    F = 0.5 + f1/f2
+    
+    return F
+
+def ModifiedSchaffer_N4(X):
+    # [1]
+    # X in [-100, 100], D fixed 2
+    # X* = [±1.253131828792882, 0] or [0, ±1.253131828792882]
+    # F* = 0.292578632035980
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    f1 = np.cos( np.sin( np.abs(X1**2-X2**2) ) )**2 - 0.5
+    f2 = ( 1 + 0.001*(X1**2+X2**2) )**2
+    F = 0.5 + f1/f2
+    
+    return F
+
+def MullerBrown(X):
+    # [1]
+    # X1 in [-1.5, 1.5], X2 in [-0.5, 2.5], D fixed 2
+    # X* = [-0.558223638251928, 1.441725828290487]
+    # F* = -146.6995172099539
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    P = X.shape[0]
+    F = np.zeros([P])
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    A = np.array([-200, -100, -170, 15.0])
+    a = np.array([-1.0, -1.0, -6.5, 0.7])
+    b = np.array([0.0, 0.0, 11, 0.6])
+    c = np.array([-10, -10, -6.5, 0.7])
+    x1j = np.array([1.0, 0.0, -0.5, -1.0])
+    x2j = np.array([0.0, 0.5, 1.5, 1.0])
+    
+    for i in range(P):
+        F[i] = np.sum( A * np.exp( a*(X1[i]-x1j)**2 + b*(X1[i]-x1j)*(X2[i]-x2j) + c*(X2[i]-x2j)**2 ) )
+    
+    return F
+
+def Parsopoulos(X):
+    # [1]
+    # X in [-5, 5], D fixed 2
+    # X* = [±1.57079633, ±0], [±4.71238898, ±0], [±1.57079633, ±3.14159265], [±4.71238898, ±3.14159265]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+
+    F = np.cos(X1)**2 + np.sin(X2)**2
+    
+    return F
+
+def Peaks(X):
+    # [1]
+    # X in [-4, 4], D fixed 2
+    # X* = [0.228279999979237, -1.625531071954464]
+    # F* = -6.551133332622496
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    f1 = 3*(1-X1)**2 * np.exp(-X1**2-(X2+1)**2)
+    f2 = 10*(X1/5-X1**3-X2**5) * np.exp(-X1**2-X2**2)
+    f3 = np.exp(-(X1+1)**2-X2**2) / 3
+    F = f1 - f2 - f3
+    
+    return F
 
 
 
@@ -1246,19 +1618,7 @@ def k_tablet(X):
     
     return F
 
-def Keane(X):
-    # X in [0, 10], D fixed 2
-    # X* = [1.393249070031784, 0] or [0, 1.393249070031784]
-    # F* = 0.673667521146855
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    
-    X1 = X[:, 0]
-    X2 = X[:, 1]
-    
-    F = -1*np.sin(X1-X2)**2*np.sin(X1+X2)**2/(X1**2+X2**2)**0.5
-    
-    return F
+
 
 def Kowalik(X):
     # X in [-5, 5], D fixed 4
@@ -1301,19 +1661,7 @@ def Langermann(X):
     
     return F
 
-def Leon(X):
-    # X in [-1.2, 1.2], D fixed 2
-    # X* = [1, 1]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    
-    X1 = X[:, 0]
-    X2 = X[:, 1]
-    
-    F = 100*(X2-X1**3)**2 + (1-X1)**2
-    
-    return F
+
 
 def Levy(X):
     # X in [-10, 10], D fixed 2
@@ -1363,33 +1711,9 @@ def Levy_and_Montalvo_2(X):
     
     return F
 
-def Matyas(X):
-    # X in [-10, 10], D fixed 2
-    # X* = [0, 0]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
 
-    X1 = X[:, 0]
-    X2 = X[:, 1]
 
-    F = 0.26*(X1**2+X2**2)-0.48*X1*X1
-    
-    return F
 
-def McCormick(X):
-    # X in [(-1.5, 4), (-3, 3)], D fixed 2
-    # X* = [-0.547, -1.547]
-    # F* = -1.9133
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-
-    X1 = X[:, 0]
-    X2 = X[:, 1]
-
-    F = np.sin(X1+X2) + (X1-X2)**2 - 1.5*X1 + 2.5*X2 + 1
-    
-    return F
 
 def Michalewicz(X, m=10):
     # X in [0, pi]
@@ -1721,47 +2045,11 @@ def Schaffer_F1(X):
     
     return F
 
-def Schaffer_F2(X):
-    # X in [-100, 100], D fixed 2
-    # X* = [0, 0]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    
-    X1 = X[:, 0]
-    X2 = X[:, 1]
-    
-    F = 0.5 + ((np.sin(X1**2-X2**2))**2 - 0.5)/(1+0.001*(X1**2+X2**2))**2
-    
-    return F
 
-def Schaffer_F3(X):
-    # X in [-100, 100], D fixed 2
-    # X* = [±1.253114962205510, 0] or [0, ±1.253114962205510]
-    # F* = 0.001566854526004
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    
-    X1 = X[:, 0]
-    X2 = X[:, 1]
-    
-    F = 0.5 + ((np.sin(np.cos(np.abs(X1**2-X2**2))))**2 - 0.5)/(1+0.001*(X1**2+X2**2))**2
-    
-    return F
 
-def Schaffer_F4(X):
-    # X in [-100, 100], D fixed 2
-    # X* = [±1.253114962205510, 0] or [0, ±1.253114962205510]
-    # F* = 0.292578632035980
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    
-    X1 = X[:, 0]
-    X2 = X[:, 1]
-    
-    F = 0.5 + ((np.cos(np.sin(np.abs(X1**2-X2**2))))**2 - 0.5)/(1+0.001*(X1**2+X2**2))**2
-    
-    return F
+
+
+
 
 def Schaffer_F6(X):
     # X in [-100, 100], D fixed 2
