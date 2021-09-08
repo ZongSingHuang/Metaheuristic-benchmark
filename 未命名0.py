@@ -7,27 +7,20 @@ Created on Tue Sep  7 11:08:21 2021
 
 import numpy as np
 
-def Damavandi(X):
+def Hosaki(X):
     # [1]
-    # X in [0, 14], D fixed 2
-    # X* = [2, 2]
-    # F* = 0
+    # X in [0, 10], D fixed 2
+    # X* = [4, 2]
+    # F* = -2.345811576101292
     if X.ndim==1:
         X = X.reshape(1, -1)
-    P = X.shape[0]
-    F = np.zeros([P])
+    
     X1 = X[:, 0]
     X2 = X[:, 1]
     
-    mask1 = X1==2
-    mask2 = X2==2
-    mask3 = mask1 * mask2
-    mask4 = ~mask3
-    f1 = 1 - np.abs( np.sin(np.pi*(X1[mask4]-2))*np.sin(np.pi*(X2[mask4]-2))/(np.pi**2*(X1[mask4]-2)*(X2[mask4]-2)) )**5
-    f2 = 2 + (X1[mask4]-7)**2 + 2*(X2[mask4]-7)**2
-    F[mask4] = f1 * f2
+    F = (1-8*X1+7*X1**2-7/3*X1**3+0.25*X1**4) * X2**2*np.exp(-X2)
     
     return F
 
-X = np.zeros([5, 2]) + 2
-F = Damavandi(X)#[2.00000000000001, 1.999999999999999]
+X = np.zeros([5, 2]) + [4, 2]
+F = Hosaki(X)
