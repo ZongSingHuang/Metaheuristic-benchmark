@@ -1201,6 +1201,189 @@ def Price_N4(X):
     
     return F
 
+def Quadratic(X):
+    # [1]
+    # X in [-10, 10], D fixed 2
+    # X* = [0.193880169366971, 0.485133920218833]
+    # F* = -3873.724182186271819
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = -3803.84 - 138.08*X1 - 232.92*X2 + 128.08*X1**2 + 203.64*X2**2 + 182.23*X1*X2
+    
+    return F
+
+def RotatedEllipse_N1(X):
+    # [1]
+    # X in [-500, 500], D fixed 2
+    # X* = [0, 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = 7*X1**2 - 6*3**0.5*X1*X2 + 13*X2**2
+    
+    return F
+
+def RotatedEllipse_N2(X):
+    # [1]
+    # X in [-500, 500], D fixed 2
+    # X* = [0, 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = X1**2 - X1*X2 + X2**2
+    
+    return F
+
+def Rump(X):
+    # [1]
+    # X in [-500, 500], D fixed 2
+    # X* = [0, 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = np.abs( (333.75-X1**2)*X2**6 + X1**2*(11*X1**2*X2**2-121*X2**4-2) + 5.5*X2**8 + X1/(2+X2) )
+    
+    return F
+
+def S2(X):
+    # [1]
+    # X in [-10, 10], D fixed 2
+    # X* = [any, 0.7]
+    # F* = 2
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = 2 + (X2-0.7)**2
+    
+    return F
+
+def S3(X):
+    # [1]
+    # X in [-10, 10], D fixed 2
+    # X* = [10, 0.7]
+    # F* = 0.528872325696265
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = 2 + (X2-0.7)**2 - np.arctan(X1)
+    
+    return F
+
+def Sawtoothxy(X):
+    # [1]
+    # X in [-20, 20], D fixed 2
+    # X* = [0, 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    r = (X1**2+X2**2)**0.5
+    t = np.arctan2(X2, X1)
+    f1 = (np.sin(r) - np.sin(2*r)/2 + np.sin(3*r)/3 - np.sin(4*r)/4 + 4) * (r**2/(r+1))
+    f2 = 0.5 * np.cos(2*t-0.5) + np.cos(t) + 2
+    F = f1 * f2
+    
+    return F
+
+def Schaffer_N6(X):
+    # [1]
+    # X in [-100, 100], D fixed 2
+    # X* = [0, 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    f1 = np.sin( (X1**2+X2**2)**0.5 )**2 - 0.5
+    f2 = ( 1 + 0.001*(X1**2+X2**2) )**2
+    F = 0.5 + f1/f2
+    
+    return F
+
+def Schaffer_N7(X):
+    # [1]
+    # X in [-100, 100], D fixed 2
+    # X* = [0, 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    f1 = (X1**2+X2**2)**0.25
+    f2 = 50*(X1**2+X2**2)**0.1 + 1
+    F = f1 * f2
+    
+    return F
+
+def ShekelFoxholes(X):
+    # De Jong 5
+    # [1]
+    # X in [-65.536, 65.536], D fixed 2
+    # X* = [-31.97833, -31.97833]
+    # F* = 0.998003837794449325873406851315
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    P = X.shape[0]
+    F = np.zeros(P)
+    
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    L = np.arange(25) + 1
+    a1 = np.tile(np.array([-32, -16, 0, 16, 32]), 5)
+    a2 = np.repeat(np.array([-32, -16, 0, 16, 32]), 5)
+    
+    for i in range(P):
+        F[i] = 1/500 + np.sum( 1 / ( L + (X1[i]-a1)**6 + (X2[i]-a2)**6 ), axis=0 )
+        
+    F = 1 / F
+    
+    return F
+
+def Six_Hump_Camel_Back(X):
+    # [1]
+    # X in [-5, 5], D fixed 2
+    # X* = [-0.08984201368301331, 0.7126564032704135] or [0.08984201368301331, -0.7126564032704135]
+    # F* = -1.031628453489877
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = 4*X1**2 - 2.1*X1**4 + X1**6/3 + X1*X2 - 4*X2**2 + 4*X2**4
+    
+    return F
+
+
+
 
 
 
@@ -1396,28 +1579,7 @@ def De_Jong3(X):
     
     return F
 
-def De_Jong5(X):
-    # Shekel's Foxholes
-    # X in [-65.536, 65.536], D fixed 2
-    # X* = [-31.97833, -31.97833]
-    # F* = 0.998003837794449325873406851315
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    P = X.shape[0]
-    F = np.zeros(P)
-    
-    X1 = X[:, 0]
-    X2 = X[:, 1]
-    L = np.arange(25) + 1
-    a1 = np.tile(np.array([-32, -16, 0, 16, 32]), 5)
-    a2 = np.repeat(np.array([-32, -16, 0, 16, 32]), 5)
-    
-    for i in range(P):
-        F[i] = 1/500 + np.sum( 1 / ( L + (X1[i]-a1)**6 + (X2[i]-a2)**6 ), axis=0 )
-        
-    F = 1 / F
-    
-    return F
+
 
 def Deckkers_Aarts(X):
     # X in [-20, 20], D fixed 2
@@ -2141,19 +2303,7 @@ def Schaffer_F1(X):
 
 
 
-def Schaffer_F6(X):
-    # X in [-100, 100], D fixed 2
-    # X* = [0, 0]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    
-    X1 = X[:, 0]
-    X2 = X[:, 1]
-    
-    F = 0.5 + (np.sin((X1**2+X2**2)**0.5)**2-0.5)/(1+0.001*(X1**2+X2**2))**2
-    
-    return F
+
 
 def Schaffer_F7(X):
     # X in [-100, 100]
@@ -2333,19 +2483,7 @@ def Sinusoidal(X):
     
     return F
 
-def Six_Hump_Camel_Back(X):
-    # X in [-5, 5], D fixed 2
-    # X* = [-0.08984201368301331, 0.7126564032704135] or [0.08984201368301331, -0.7126564032704135]
-    # F* = -1.031628453489877
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    
-    X1 = X[:, 0]
-    X2 = X[:, 1]
-    
-    F = 4*X1**2 - 2.1*X1**4 + 1/3*X1**6 + X1*X2 - 4*X2**2 + 4*X2**4
-    
-    return F
+
 
 def Sphere(X):
     # Spherical Contours, Square Sum, Harmonic, De_Jong1 or Schumer-Steiglitz1
