@@ -909,7 +909,7 @@ def Brent(X):
 
 def Bukin_N4(X):
     # [1]
-    # X1 in [-15,-5], X2 in [-3, 3], D fixed 2
+    # X1 in [-15, -5], X2 in [-3, 3], D fixed 2
     # X* = [-10, 0]
     # F* = 0
     if X.ndim==1:
@@ -924,7 +924,7 @@ def Bukin_N4(X):
 
 def Bukin_N6(X):
     # [1]
-    # X1 in [-15,-5], X2 in [-3, 3], D fixed 2
+    # X1 in [-15, -5], X2 in [-3, 3], D fixed 2
     # X* = [-10, 1]
     # F* = 0
     if X.ndim==1:
@@ -939,7 +939,7 @@ def Bukin_N6(X):
 
 def Camel(X):
     # [1]
-    # X in [-2,-2], D fixed 2
+    # X in [-2, 2], D fixed 2
     # X* = [-1.5, 0], [1.5, 0]
     # F* = 0
     if X.ndim==1:
@@ -952,9 +952,185 @@ def Camel(X):
     
     return F
 
+def CarromTable(X):
+    # [1]
+    # X in [-10, 10], D fixed 2
+    # X* = [±9.646157266348881, ±9.646157266348881]
+    # F* = -24.15681551650653
+    if X.ndim==1:
+        X = X.reshape(1, -1)
 
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = -1/30 * np.exp(2*np.abs(1-(X1**2+X2**2)**0.5/np.pi)) *np.cos(X1)**2 * np.cos(X2)**2
+    
+    return F
 
+def ChenBird(X):
+    # [1]
+    # X in [-500, 500], D fixed 2
+    # X* = [0.5, 0.5]
+    # F* = -2000.003999984000
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    b = 0.001
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    f1 = b**2 + (X1**2+X2**2-1)**2
+    f2 = b**2 + (X1**2+X2**2-1/2)**2
+    f3 = b**2 + (X1-X2)**2
+    
+    F = b/f1 + b/f2 + b/f3
+    
+    return -F
 
+def ChenV(X):
+    # [1]
+    # X in [-500, 500], D fixed 2
+    # X* = [0.388888888888889, 0.722222222222222]
+    # F* = -2000
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    b = 0.001
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    f1 = b**2 + (X1-0.4*X2-0.1)**2
+    f2 = b**2 + (2*X1+X2-1.5)**2
+
+    F = b/f1 + b/f2
+    
+    return -F
+
+def Chichinadze(X):
+    # [1]
+    # X in [-30, 30], D fixed 2
+    # X* = [6.189866586965680, 0.5]
+    # F* = -42.94438701899098
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    F = X1**2 - 12*X1 + 11 + 10*np.cos(0.5*np.pi*X1) + 8*np.sin(2.5*np.pi*X1) - 0.2*5**0.5/np.exp(0.5*(X2-0.5)**2)
+    
+    return F
+
+def Complex(X):
+    # [1]
+    # X in [-2, 2], D fixed 2
+    # X* = [1, 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+        
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    F = (X1**3-3*X1*X2**2-1)**2 + (3*X2*X1**2-X2**3)**2
+    
+    return F
+
+def CrossInTray(X):
+    # [1]
+    # X in [-15, 15], D fixed 2
+    # X* = [±1.349406608602084, ±1.349406608602084]
+    # F* = -2.062611870822739
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = -1E-4*( np.abs( np.sin(X1)*np.sin(X2)*np.exp( np.abs(100-(X1**2+X2**2)**0.5/np.pi) ) ) + 1 )**0.1
+    
+    return F
+
+def CrossLegTable(X):
+    # [1]
+    # X in [-10, 10], D fixed 2
+    # X* = [0, 0]
+    # F* = -1
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = -1/( np.abs( np.sin(X1)*np.sin(X2)*np.exp( np.abs(100-(X1**2+X2**2)**0.5/np.pi) ) ) + 1 )**0.1
+    
+    return F
+
+def CrownedCross(X):
+    # [1]
+    # X in [-10, 10], D fixed 2
+    # X* = [0, 0]
+    # F* = 0.0001
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = 1E-4*( np.abs( np.sin(X1)*np.sin(X2)*np.exp( np.abs(100-(X1**2+X2**2)**0.5/np.pi) ) ) + 1 )**0.1
+    
+    return F
+
+def Cube(X):
+    # [1]
+    # X in [-10, 10], D fixed 2
+    # X* = [1, 1]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = 100*(X2-X1**3)**2 + (1-X1)**2
+    
+    return F
+
+def Damavandi(X):
+    # [1], http://cilib.sourceforge.net/apidocs/net/sourceforge/cilib/functions/continuous/unconstrained/Damavandi.html
+    # X in [0, 14], D fixed 2
+    # X* = [2, 2]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    P = X.shape[0]
+    F = np.zeros([P])
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    # 當X=[2, 2]，會導致F=0/0=np.nan，故忽略
+    mask1 = X1==2
+    mask2 = X2==2
+    mask3 = mask1 * mask2
+    mask4 = ~mask3
+    f1 = 1 - np.abs( np.sin(np.pi*(X1[mask4]-2))*np.sin(np.pi*(X2[mask4]-2))/(np.pi**2*(X1[mask4]-2)*(X2[mask4]-2)) )**5
+    f2 = 2 + (X1[mask4]-7)**2 + 2*(X2[mask4]-7)**2
+    F[mask4] = f1 * f2
+    
+    return F
+
+def Davis(X):
+    # [1]
+    # X in [-100, 100], D fixed 2
+    # X* = [0, 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    
+    
+    return F
 
 
 
@@ -1125,19 +1301,7 @@ def Cosine_Mixture(X):
     
     return F
 
-def Cross_in_Tray(X):
-    # X in [-10, 10], D fixed 2
-    # X* = [±1.349406685353340, ±1.349406608602084]
-    # F* = -2.06261218
-    if X.ndim==1:
-        X = X.reshape(1, -1)
 
-    X1 = X[:, 0]
-    X2 = X[:, 1]
-    
-    F = -1E-4*( np.abs( np.sin(X1)*np.sin(X2)*np.exp( np.abs(100-(X1**2+X2**2)**0.5/np.pi) ) ) + 1 )**0.1
-    
-    return F
 
 def Csendes(X):
     # X in [-1, 1]
