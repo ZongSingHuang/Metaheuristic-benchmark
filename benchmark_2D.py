@@ -548,6 +548,21 @@ def EggCrate(X):
     
     return F
 
+def Eggholder(X):
+    # [1]
+    # X in [-512, 512], D fixed 2
+    # X* = [512, 404.231805123817]
+    # F* = -959.640662720850742
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+
+    X1 = X[:, 0]
+    X2 = X[:, 1]
+    
+    F = -(X2+47) * np.sin(np.abs(X2 +X1/2+47)**0.5) - X1*np.sin(np.abs(X1-(X2+47))**0.5)
+    
+    return F
+
 def ElAttarVidyasagarDutta(X):
     # [1]
     # X in [-500, 500], D fixed 2

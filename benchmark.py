@@ -16,48 +16,394 @@ import numpy as np
 # =============================================================================
 # n-D
 # =============================================================================
-def Cola(X):
+def Ackley_N1(X):
+    # Ackley's Path Function
     # [1]
-    # X1 in [0, 4], other X in [-4, 4], D fixed 17
-    # X* = [0.651906, 1.30194, 0.099242, -0.883791, -0.8796,
-    #       0.204651, -3.28414, 0.851188, -3.46245, 2.53245, -0.895246,
-    #       1.40992, -3.07367, 1.96257, -2.97872, -0.807849, -1.68978]
-    # F* = 11.7464
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-            
-    return F
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def Ackley1(X):
-    # X in [-35, 35]
+    # X in [-32, 32]
     # X* = [0, 0, ..., 0]
     # F* = 0
     if X.ndim==1:
         X = X.reshape(1, -1)
     D = X.shape[1]
     
-    left = -20 * np.exp( -0.02 * ( 1/D * np.sum(X**2, axis=1) )**0.5 )
-    right = np.exp( 1/D * np.sum( np.cos(2*np.pi*X), axis=1 ) )
+    f1 = -0.2 * (np.sum(X**2, axis=1)/D)**0.5
+    f2 = np.sum(np.cos(2*np.pi*X), axis=1)/D
     
-    F = left - right + 20 + np.e
+    F = -20*np.exp(f1) - np.exp(f2) + 20 + np.exp(1)
     
     return F
+
+def Alpine_N1(X):
+    # [1]
+    # X in [-10, 10]
+    # X* = [0, 0, ..., 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    F = np.sum( np.abs( X*np.sin(X) + 0.1*X ), axis=1 )
+    
+    return F
+
+def Alpine_N2(X):
+    # [1]
+    # X in [0, 10]
+    # X* = [7.9170526982459462172, 7.9170526982459462172, ..., 7.9170526982459462172]
+    # F* = 2.8081311800070053291**D
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    F = np.prod( np.sin(X) * X**0.5, axis=1 )
+    
+    return F
+
+def BentCigar(X):
+    # [1]
+    # X in [-100, 100]
+    # X* = [0, 0, ..., 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    F = X[:, 0]**2 + 1E6*np.sum(X[:, 1:]**2, axis=1)
+    
+    return F
+
+def Brown(X):
+    # [1]
+    # X in [-1, 4]
+    # X* = [0, 0, ..., 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    F = np.sum( (X[:, :-1]**2)**(X[:, 1:]**2+1) + (X[:, 1:]**2)**(X[:, :-1]**2+1), axis=1 )
+    
+    return F
+
+def ChungReynolds(X):
+    # [1]
+    # X in [-100, 100]
+    # X* = [0, 0, ..., 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    F = np.sum( X**2, axis=1 )**2
+    
+    return F
+
+def CosineMixture(X):
+    # [1]
+    # X in [-1, 1]
+    # X* = [0, 0, ..., 0]
+    # F* = 0.1*D
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    F = 0.1*np.sum( np.cos(5*np.pi*X), axis=1 ) - np.sum(X**2, axis=1)
+    
+    return F
+
+def Deb_N1(X):
+    # [1]
+    # X in [-1, 1]
+    # X* = ???
+    # F* = -1
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    return F
+
+def Deb_N2(X):
+    # [1]
+    # X in [0, 1]
+    # X* = ???
+    # F* = -1
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    return F
+
+def DeflectedCorrugatedSpring(X):
+    # [1]
+    # X in [0, 10]
+    # X* = [5, 5, ..., 5]
+    # F* = -1
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    return F
+
+def DixonPrice(X):
+    # [1]
+    # X in [-10, 10]
+    # X* = [2**((2-2*1)/(2*1)), 2**((2-2*2)/(2*2)), ..., 2**((2-2*D)/(2*D))]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    D = X.shape[1]
+    L = np.arange(D) + 1
+    
+    F = (X[:, 0]-1)**2 + np.sum( L[1:]*(2*X[:, 1:]**2 - X[:, :-1])**2, axis=1 )
+    
+    return F
+
+def EX3(X):
+    # Csendes' or Infinity Function
+    # [1]
+    # X in [-1, 1]
+    # X* = [0, 0, ..., 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    P = X.shape[0]
+    F = np.zeros(P)
+    
+    check = np.prod(X, axis=1)
+    mask = check!=0
+    F[mask] = np.sum( X[mask]**6 * (2+np.sin(1/X[mask])) ,axis=1 )
+    
+    return F
+
+def Exponential(X):
+    # [1]
+    # X in [-1, 1]
+    # X* = [0, 0, ..., 0]
+    # F* = 1
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    F = np.exp( -0.5 * np.sum(X**2, axis=1) )
+    
+    return F
+
+def DixonPriceRosenbrock(X):
+    # [1]
+    # X in [-30, 30]
+    # X* = [0, 0, ..., 0]
+    # F* = 1
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    return F
+
+def Griewank(X):
+    # [1]
+    # X in [-600, 600]
+    # X* = [0, 0, ..., 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    D = X.shape[1]
+    L = (np.arange(D) + 1)**0.5
+    
+    F = 1 + 1/4000 * np.sum(X**2, axis=1) - np.prod( np.cos(X/L), axis=1 )
+    
+    return F
+
+def ModifiedRosenbrock_N1(X):
+    # Flat-Ground Bent Knife-Edge Function
+    # [1]
+    # X in [-2000, 2000]
+    # X* = [0, 0, ..., 0]
+    # F* = 1
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    return F
+
+def ModifiedRosenbrock_N2(X):
+    # Hollow-Ground Bent Knife-Edge Function
+    # [1]
+    # X in [-2000, 2000]
+    # X* = [0, 0, ..., 0]
+    # F* = 1
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    return F
+
+def Penalized_N1(X):
+    # [1]
+    # X in [-50, 50]
+    # X* = [-1, -1, ..., -1]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    D = X.shape[1]
+    
+    y = 1 + 1/4 * (X+1)
+    first = 10 * np.sin( np.pi*y[:, 0] )**2
+    second = np.sum( (y[:, :-1]-1)**2 * ( 1 + 10*np.sin(np.pi*y[:, 1:])**2 ), axis=1 )
+    third = ( y[:, -1] - 1 )**2
+    
+    F = np.pi/D * (first+second+third) + u(X, 10, 100, 4)
+    
+    return F
+
+def Penalized_N2(X):
+    # [1]
+    # X in [-50, 50]
+    # X* = [1, 1, ..., 1]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    first = np.sin(3*np.pi*X[:, 0])**2
+    second = np.sum( (X[:, :-1]-1)**2 * ( 1+np.sin(3*np.pi*X[:, 1:])**2 ), axis=1 )
+    third = ( X[:, -1] - 1 )**2 * (1 + np.sin(2*np.pi*X[:, -1])**2)
+    
+    F = 0.1 * (first+second+third) + u(X, 5, 100, 4)
+    
+    return F
+
+def Rastrigin(X):
+    # [1]
+    # X in [-5.12, 5.12]
+    # X* = [0, 0, ..., 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    F = np.sum( X**2 - 10*np.cos(2*np.pi*X) + 10, axis=1 )
+    
+    return F
+
+def RosenbrockValley(X):
+    # [1]
+    # Banana or 2nd De Jong's Function
+    # X in [-30, 30]
+    # X* = [1, 1, ..., 1]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    F = np.sum( 100*(X[:, 1:]-X[:, :-1]**2)**2 + (X[:, :-1]-1)**2, axis=1 )
+    
+    return F
+
+def Schwefel_N226(X):
+    # [1]
+    # X in [-500, 500]
+    # X* = [420.96874636, 420.96874636, ..., 420.96874636]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    D = X.shape[1]
+    
+    F = 418.982887272433799807913601398*D - np.sum(X * np.sin( np.abs(X)**0.5 ), axis=1 )
+    
+    return F
+
+def Holzman_N2(X):
+    # [1]
+    # X in [-10, 10]
+    # X* = [0, 0, ..., 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    D = X.shape[1]
+    
+    L = np.arange(D) + 1
+    
+    F = np.sum( L*X**4, axis=1 )
+    
+    return F
+
+def HyperEllipsoid(X):
+    # [1]
+    # X in [-1, 1]
+    # X* = [0, 0, ..., 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    return F
+
+def InvertedCosineWave(X):
+    # [1]
+    # X in [-5, 5]
+    # X* = [-D+1, -D+1, ..., -D+1]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    return F
+
+def L(X):
+    #  F2 Function
+    # X in [0, 1]
+    # X* = [0.066832364099628, 0.066832364099628, ..., 0.066832364099628]
+    # F* = -1
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    return F
+
+def LunacekbiRastrigin(X):
+    #  F2 Function
+    # X in [0, 1]
+    # X* = [0.066832364099628, 0.066832364099628, ..., 0.066832364099628]
+    # F* = -1
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    
+    return F
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def InvertedCosineMixture(X):
+    # [1]
+    # X in [-5, 5]
+    # X* = [0, 0, ..., 0]
+    # F* = 0
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    D = X.shape[1]
+    
+    F = 0.1*D - ( 0.1*np.sum(np.cos(5*np.pi*X), axis=1) - np.sum(X**2, axis=1) )
+    
+    return F
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def Ackley2(X):
     # X in [-32, 32], D fixed 2
@@ -98,27 +444,6 @@ def Ackley4(X):
 
 
 
-def Alpine1(X):
-    # X in [-10, 10]
-    # X* = [0, 0, ..., 0]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    
-    F = np.sum( np.abs( X*np.sin(X)+0.1*X ), axis=1 )
-    
-    return F
-
-def Alpine2(X):
-    # X in [-10, 10]
-    # X* = [7.9170526982459462172, 7.9170526982459462172, ..., 7.9170526982459462172]
-    # F* = 2.8081311800070053291**D
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    
-    F = np.prod( np.sin(X)*X**0.5, axis=1 )
-    
-    return F
 
 
 
@@ -134,72 +459,26 @@ def Alpine2(X):
 
 
 
-def Brown(X):
-    # X in [-1, 4]
-    # X* = [0, 0, ..., 0]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    
-    F = np.sum( (X[:, :-1]**2)**(X[:, 1:]**2+1) + (X[:, 1:]**2)**(X[:, :-1]**2+1), axis=1 )
-    
-    return F
 
 
 
 
 
-def Chung_Reynolds(X):
-    # X in [-100, 100]
-    # X* = [0, 0, ..., 0]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    
-    F = np.sum( X**2, axis=1 )**2
-    
-    return F
-
-def Cigar(X):
-    # X in [-100, 100]
-    # X* = [0, 0, ..., 0]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    
-    F = X[:, 0]**2 + 1E6*np.sum(X[:, 1:]**2, axis=1)
-    
-    return F
 
 
 
-def Cosine_Mixture(X):
-    # X in [-1, 1]
-    # X* = [0, 0, ..., 0]
-    # F* = -0.1*D
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    
-    F = np.sum(X**2, axis=1) - 0.1*np.sum(np.cos(5*np.pi*X), axis=1)
-    
-    return F
 
 
 
-def Csendes(X):
-    # X in [-1, 1]
-    # X* = [0, 0, ..., 0]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    P = X.shape[0]
-    F = np.zeros(P)
-    
-    check = np.prod(X, axis=1)
-    mask = check!=0
-    F[mask] = np.sum( X[mask]**6 * (2+np.sin(1/X[mask])) ,axis=1 )
-    
-    return F
+
+
+
+
+
+
+
+
+
 
 def De_Jong3(X):
     # X in [-5.12, 5.12]
@@ -229,18 +508,7 @@ def Deckkers_Aarts(X):
     
     return F
 
-def Dixon_Price(X):
-    # X in [-10, 10]
-    # X* = [2**((2-2*1)/(2*1)), 2**((2-2*2)/(2*2)), ..., 2**((2-2*D)/(2*D))]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    D = X.shape[1]
-    L = np.arange(D) + 1
-    
-    F = (X[:, 0]-1)**2 + np.sum( L[1:]*(2*X[:, 1:]**2 - X[:, :-1])**2, axis=1 )
-    
-    return F
+
 
 
 
@@ -260,19 +528,7 @@ def Egg_Crate(X):
     
     return F
 
-def Eggholder(X):
-    # X in [-512, 512], D fixed 2
-    # X* = [512, 404.2319]
-    # F* = -959.6407
-    if X.ndim==1:
-        X = X.reshape(1, -1)
 
-    X1 = X[:, 0]
-    X2 = X[:, 1]
-    
-    F = -(X2+47) * np.sin(np.abs(X2 +X1/2+47)**0.5) - X1*np.sin(np.abs(X1-(X2+47))**0.5)
-    
-    return F
 
 def Ellipsoid(X):
     # X in [-5.12, 5.12]
@@ -313,16 +569,7 @@ def Elliptic(X):
     
     return F
 
-def Exponential(X):
-    # X in [-1, 1]
-    # X* = [0, 0, ..., 0]
-    # F* = -1
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    
-    F = -1 * np.exp( -0.5 * np.sum(X**2, axis=1) )
-    
-    return F
+
 
 def Five_well_potential(X):
     # X in [-20, 20], D fixed 2
@@ -372,18 +619,7 @@ def Gramacy_Lee(X):
     
     return F
 
-def Griewank(X):
-    # X in [-600, 600]
-    # X* = [0, 0, ..., 0]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    D = X.shape[1]
-    L = (np.arange(D) + 1)**0.5
-    
-    F = 1 + 1/4000 * np.sum(X**2, axis=1) - np.prod( np.cos(X/L), axis=1 )
-    
-    return F
+
 
 def Happy_Cat(X):
     # X in [-2, 2]
@@ -436,17 +672,7 @@ def Hartmann4(X):
 
 
 
-def Inverted_Cosine_Mixture(X):
-    # X in [-1, 1]
-    # X* = [0, 0, ..., 0]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    D = X.shape[1]
-    
-    F = 0.1*D - ( 0.1*np.sum(np.cos(5*np.pi*X), axis=1) - np.sum(X**2, axis=1) )
-    
-    return F
+
 
 def k_tablet(X):
     # X in [-5.12, 5.12]
@@ -649,37 +875,7 @@ def Paviani(X):
     
     return F
 
-def Penalized1(X):
-    # X in [-50, 50]
-    # X* = [-1, -1, ..., -1]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    D = X.shape[1]
-    
-    y = 1 + 1/4 * (X+1)
-    first = 10 * np.sin( np.pi*y[:, 0] )**2
-    second = np.sum( (y[:, :-1]-1)**2 * ( 1 + 10*np.sin(np.pi*y[:, 1:])**2 ), axis=1 )
-    third = ( y[:, -1] - 1 )**2
-    
-    F = np.pi/D * (first+second+third) + u(X, 10, 100, 4)
-    
-    return F
 
-def Penalized2(X):
-    # X in [-50, 50]
-    # X* = [1, 1, ..., 1]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    
-    first = np.sin(3*np.pi*X[:, 0])**2
-    second = np.sum( (X[:, :-1]-1)**2 * ( 1+np.sin(3*np.pi*X[:, 1:])**2 ), axis=1 )
-    third = ( X[:, -1] - 1 )**2 * (1 + np.sin(2*np.pi*X[:, -1])**2)
-    
-    F = 0.1 * (first+second+third) + u(X, 5, 100, 4)
-    
-    return F
 
 
 
@@ -796,17 +992,7 @@ def Rana(X):
     
     return F
 
-def Rastrigin(X):
-    # X in [-5.12, 5.12]
-    # X* = [0, 0, ..., 0]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    D = X.shape[1]
-    
-    F = 10*D + np.sum( X**2 - 10*np.cos(2*np.pi*X), axis=1 )
-    
-    return F
+
 
 def Ridge(X):
     # not sure
@@ -825,17 +1011,7 @@ def Ridge(X):
     
     return F
 
-def Rosenbrock(X):
-    # De_Jong2, Banana
-    # X in [-30, 30]
-    # X* = [1, 1, ..., 1]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    
-    F = np.sum( 100*(X[:, 1:]-X[:, :-1]**2)**2 + (X[:, :-1]-1)**2, axis=1 )
-    
-    return F
+
 
 def Salomon(X):
     # X in [-100, 100]
@@ -943,18 +1119,7 @@ def Schwefel223(X):
     
     return F
 
-def Schwefel226(X):
-    # Schwefel 2.26
-    # X in [-500, 500]
-    # X* = [420.96874636, 420.96874636, ..., 420.96874636]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    D = X.shape[1]
-    
-    F = 418.9828872724339*D - np.sum(X * np.sin( np.abs(X)**0.5 ), axis=1 )
-    
-    return F
+
 
 def Shekel(X, m=5):
     # X in [0, 10], D fixed 4
