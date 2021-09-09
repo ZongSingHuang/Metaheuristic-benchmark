@@ -7,15 +7,14 @@ Created on Tue Sep  7 11:08:21 2021
 
 import numpy as np
 
-def PriceTransistorModelling(X):
+def Simpleton(X):
     # [1]
-    # X in [-10, 10], D fixed 9
-    # X* = [0.9, 0.45, 1,2, 8, 8, 5, 1, 2]
-    # F* = 0
+    # X in [1, 10], D fixed 10
+    # X* = [10, 10, 10, 10, 10, 1, 1, 1, 1, 1]
+    # F* = 1E5
     if X.ndim==1:
         X = X.reshape(1, -1)
-    P = X.shape[0]
-    F = np.zeros([P])
+    
     X1 = X[:, 0]
     X2 = X[:, 1]
     X3 = X[:, 2]
@@ -25,21 +24,11 @@ def PriceTransistorModelling(X):
     X7 = X[:, 6]
     X8 = X[:, 7]
     X9 = X[:, 8]
+    X10 = X[:, 9]
     
-    g = np.array([[0.485000, 0.752000, 0.869000, 0.982000],
-                  [0.369000, 1.254000, 0.703000, 1.455000],
-                  [5.209500, 10.06770, 22.92740, 20.21530],
-                  [23.30370, 101.7790, 111.4610, 191.2670],
-                  [28.51320, 111.8467, 134.3884, 211.4823]])
+    F = X1*X2*X3*X4*X5/(X6*X7*X8*X9*X10)
     
-    r = X1*X3 - X2*X4
-    for i in range(P):
-        a = (1-X1[i]*X2[i]) * X3[i] * ( np.exp(X5[i]*(g[0]-g[2]*X7[i]*1e-3-g[4]*X8[i]*1e-3)) - 1 ) - g[4] + g[3]*X2[i]
-        b = (1-X1[i]*X2[i]) * X4[i] * ( np.exp(X6[i]*(g[0]-g[1]-g[2]*X7[i]*1e-3+g[3]*X9[i]*1e-3)) - 1 ) - g[4]*X1[i] + g[3]
-        
-        F[i] = r[i]**2 + np.sum(a**2+b**2)
-        
     return F
 
-X = np.zeros([5, 9]) + [0.9, 0.45, 1,2, 8, 8, 5, 1, 2]
-F = PriceTransistorModelling(X)
+X = np.zeros([5, 10]) + [10, 10, 10, 10, 10, 1, 1, 1, 1, 1]
+F = Simpleton(X)
