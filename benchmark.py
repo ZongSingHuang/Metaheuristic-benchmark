@@ -8,108 +8,25 @@ Created on Thu Aug 26 15:01:28 2021
 # =============================================================================
 # main ref
 # [1] https://www.al-roomi.org/benchmarks
-# [2] A Fuzzy Adaptive Simplex Search Optimization Algorithm
-# [3] http://infinity77.net/global_optimization/genindex.html
-# [4] https://www.sfu.ca/~ssurjano/optimization.html
 # =============================================================================
 
 import numpy as np
 
 #%%
 # =============================================================================
-# 3-D
+# n-D
 # =============================================================================
-def CoranaParabola(X):
+def Cola(X):
     # [1]
-    # X in [-100, 100], D fixed 4
-    # X* = [0, 0, 0, 0]
-    # F* = 0
+    # X1 in [0, 4], other X in [-4, 4], D fixed 17
+    # X* = [0.651906, 1.30194, 0.099242, -0.883791, -0.8796,
+    #       0.204651, -3.28414, 0.851188, -3.46245, 2.53245, -0.895246,
+    #       1.40992, -3.07367, 1.96257, -2.97872, -0.807849, -1.68978]
+    # F* = 11.7464
     if X.ndim==1:
         X = X.reshape(1, -1)
-    P = X.shape[0]
-    F = np.zeros([P])
-    si = 0.2
-    di = np.array([1, 1000, 10, 100])
-    zi = 0.2*np.floor( np.abs(X/si)+0.49999 ) * np.sign(X)
-    
-    mask1 = np.abs(X-zi)<0.05
-    mask2 = ~mask1
-    F[mask1] = 0.15*di[mask1]*(zi[mask1]-0.05*np.sign(zi[mask1]))**2
-    F[mask2] = di[mask2]*X[mask2]**2
-    
+            
     return F
-
-def Gear(X):
-    # [1]
-    # X in [12, 60], D fixed 4
-    # X* = [16, 19, 43, 49], 其中X1可以和X2對調；X3可以和X4對調，例如[19, 16, 49, 43]或者[19, 16, 43, 49]
-    # F* = 2.700857148886513e-12
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-
-    X1 = X[:, 0]
-    X2 = X[:, 1]
-    X3 = X[:, 2]
-    X4 = X[:, 3]
-    
-    F = ( 1/6.931 - (np.floor(X1)*np.floor(X2))/(np.floor(X3)*np.floor(X4)) )**2
-    
-    return F
-
-def MieleCantrell(X):
-    # [1]
-    # X in [-1, 1], D fixed 4
-    # X* = [0, 1, 1, 1]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-
-    X1 = X[:, 0]
-    X2 = X[:, 1]
-    X3 = X[:, 2]
-    X4 = X[:, 3]
-    
-    F = (np.exp(X1)-X2)**4 + 100*(X2-X3)**6 + np.tan(X3-X4)**4 + X1**8
-    
-    return F
-
-def PowellQuartic(X):
-    # Powell’s Singular Function
-    # [1]
-    # X in [-10, 10], D fixed 4
-    # X* = [0, 0, 0, 0]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-
-    X1 = X[:, 0]
-    X2 = X[:, 1]
-    X3 = X[:, 2]
-    X4 = X[:, 3]
-    
-    F = (X1+10*X2)**2 + 5*(X3-X4)**2 + (X2-2*X3)**4 + 10*(X1-X4)**4
-    
-    return F
-
-def Wood(X):
-    # [1]
-    # Colville's Function
-    # X in [-10, 10], D fixed 4
-    # X* = [1, 1, 1, 1]
-    # F* = 0
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-        
-    X1 = X[:, 0]
-    X2 = X[:, 1]
-    X3 = X[:, 2]
-    X4 = X[:, 3]
-    
-    F = (100*(X2-X1**2))**2 + (1-X1)**2 + 90*(X4-X3**2)**2 + (1-X3)**2 + 10.1*((X2-1)**2+(X4-1)**2) + 19.8*(X2-1)*(X4-1)
-    
-    return F
-
-
 
 
 
@@ -513,34 +430,7 @@ def Hartmann4(X):
     
     return F
 
-def Hartmann6(X):
-    # X in [0, 1], D fixed 6
-    # X* = [0.20168952, 0.15001069, 0.47687398, 0.27533243, 0.31165162, 0.65730054]
-    # F* = -3.32236801141551
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    P = X.shape[0]
-    F = np.zeros(P)
-    a = np.array([1.0, 1.2, 3.0, 3.2])
-    A = np.array([[10, 3, 17, 3.5, 1.7, 8],
-                  [0.05, 10, 17, 0.1, 8, 14],
-                  [3, 3.5, 1.7, 10, 17, 8],
-                  [17, 8, 0.05, 10, 0.1, 14]])
-    p = 1e-4 * np.array([[1312, 1696, 5569, 124, 8283, 5886],
-                         [2329, 4135, 8307, 3736, 1004, 9991],
-                         [2348, 1451, 3522, 2883, 3047, 6650],
-                         [4047, 8828, 8732, 5743, 1091, 381]])
-    
-    for k in range(P):
-        first = a[0] * np.exp(-1*np.sum(A[0]*(X[k]-p[0])**2))
-        second = a[1] * np.exp(-1*np.sum(A[1]*(X[k]-p[1])**2))
-        third = a[2] * np.exp(-1*np.sum(A[2]*(X[k]-p[2])**2))
-        fourth = a[3] * np.exp(-1*np.sum(A[3]*(X[k]-p[3])**2))
-        
-        F[k] = -1*(first + second + third + fourth)
-            
-    
-    return F
+
 
 
 
