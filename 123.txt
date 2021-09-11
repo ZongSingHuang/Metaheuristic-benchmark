@@ -1,0 +1,8 @@
+Test functions for optimization needs
+https://www.sfu.ca/~ssurjano/optimization.html
+https://al-roomi.org/benchmarks/unconstrained/n-dimensions/185-qing-s-function
+http://infinity77.net/global_optimization/test_functions_nd_P.html#go_benchmark.PowerSum
+MVF - Multivariate Test Functions Library in C for Unconstrained Global Optimization
+GEATbx Examples Examples of Objective Functions
+Common Benchmark Functions for Metaheuristic Evaluation: A Review
+A Literature Survey of Benchmark Functions For Global Optimization Problems
