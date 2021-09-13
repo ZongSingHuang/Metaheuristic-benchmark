@@ -271,7 +271,7 @@ def Branin(X):
     return F
 
 def Hartmann3(X):
-    # X in [1, 3], D fixed 3
+    # X in [0, 1], D fixed 3
     # X* = [0.1, 0.55592003, 0.85218259]
     # F* = -3.86278214782076
     if X.ndim==1:
@@ -354,7 +354,7 @@ def Zakharov(X):
     return F
 
 def SumSquares(X):
-    # X in [-5.12, 5.12]
+    # X in [-10, 10]
     # X* = [0, 0, ..., 0]
     # F* = 0
     if X.ndim==1:
@@ -526,7 +526,7 @@ def Easom(X):
     return F
 
 def PowellSum(X):
-    # X in [-100, 100]
+    # X in [-1, 1]
     # X* = [0, 0, ..., 0]
     # F* = 0
     if X.ndim==1:
@@ -770,7 +770,7 @@ def Pathological(X):
     return F
 
 def Schwefel220(X):
-    # X in [-1, 1]
+    # X in [-100, 100]
     # X* = [0, 0, ..., 0]
     # F* = 0
     if X.ndim==1:
