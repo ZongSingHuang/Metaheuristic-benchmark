@@ -19,7 +19,6 @@ def Sphere(X):
     return F
 
 def Rastrigin(X):
-    # [1]
     # X in [-5.12, 5.12]
     # X* = [0, 0, ..., 0]
     # F* = 0
@@ -101,7 +100,7 @@ def Quartic(X):
     D = X.shape[1]
     
     r = np.random.uniform(size=[P])
-    L = np.arange(D)
+    L = np.arange(D) + 1
     
     F = np.sum( L*X**4, axis=1 ) + r
     
@@ -235,7 +234,7 @@ def GoldsteinPrice(X):
 def Shekel(X, m=5):
     # X in [0, 10], D fixed 4
     # X* = [4, 4, 4, 4]
-    # F*(m=5)=-10.1499 , F*(m=7)=-10.3999, F*(m=10)=-10.5319
+    # F*(m=5)=-10.1527 , F*(m=7)=-10.3999, F*(m=10)=-10.5319
     if X.ndim==1:
         X = X.reshape(1, -1)
     P = X.shape[0]
@@ -273,8 +272,8 @@ def Branin(X):
 
 def Hartmann3(X):
     # X in [1, 3], D fixed 3
-    # X* = [0.114614, 0.555649, 0.852547]
-    # F* = -3.86278
+    # X* = [0.1, 0.55592003, 0.85218259]
+    # F* = -3.86278214782076
     if X.ndim==1:
         X = X.reshape(1, -1)
     P = X.shape[0]
@@ -483,7 +482,7 @@ def CosineMixture(X):
 
 def Ellipsoidal(X):
     # X in [-D, D]
-    # X* = [0, 1, ..., D-1]
+    # X* = [1, 2, ..., D]
     # F* = 0
     if X.ndim==1:
         X = X.reshape(1, -1)
@@ -540,7 +539,6 @@ def PowellSum(X):
     return F
 
 def LevyandMontalvo2(X):
-    # LEVY FUNCTION N. 13
     # X in [-5, 5]
     # X* = [1, 1, ..., 1]
     # F* = 0
@@ -684,9 +682,9 @@ def Leon(X):
     return F
 
 def Paviani(X):
-    # X in [2, 10], D fixed 10
-    # X* = [9.35027, 9.35027, ..., 9.35027]
-    # F* = -45.77848
+    # X in [2.001, 9.999], D fixed 10
+    # X* = [9.350266, 9.350266, ..., 9.350266]
+    # F* = -45.7784684040686
     if X.ndim==1:
         X = X.reshape(1, -1)
     
@@ -731,12 +729,9 @@ def NoncontinuousRastrigin(X):
     
     return F
 
-def Fletcher(X):
-    return F
-
 def Levy(X):
-    # X in [-10, 10], D fixed 2
-    # X* = [1, 1]
+    # X in [-10, 10]
+    # X* = [1, 1, ..., 1]
     # F* = 0
     if X.ndim==1:
         X = X.reshape(1, -1)
@@ -814,8 +809,6 @@ def Zettl(X):
     return F
 
 def PowellQuartic(X):
-    # Powell’s Singular Function
-    # [1]
     # X in [-10, 10], D fixed 4
     # X* = [0, 0, 0, 0]
     # F* = 0
