@@ -419,7 +419,7 @@ def Bohachevsky1(X):
     
     return F
 
-def Ellipsoid(X):
+def Elliptic(X):
     # X in [-100, 100]
     # F* = 0
     # X* = [0, 0, ..., 0]
@@ -509,7 +509,7 @@ def Easom(X):
     
     return F
 
-def PowellSum(X):
+def SumofDifferentPower(X):
     # X in [-1, 1]
     # F* = 0
     # X* = [0, 0, ..., 0]
