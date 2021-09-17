@@ -13,3 +13,5 @@
 4-2. 同一個benchmark function，有多個名稱
 
 4-3. benchmark function的公式，在細節上略有不同
+
+5. 如果「Fourmula.ipynb」無法完整顯示，請將檔案載到本機端進行閱覽
