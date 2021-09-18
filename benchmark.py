@@ -763,7 +763,24 @@ def NoncontinuousRastrigin(X):
     return F
 
 def Fletcher(X):
-    pass
+    # X in [-PI, PI]
+    # F* = ?
+    # X* = ?
+    if X.ndim==1:
+        X = X.reshape(1, -1)
+    P = X.shape[0]
+    D = X.shape[1]
+    
+    u = np.random.randint(low=-100, high=100, size=[P, D])
+    v = np.random.randint(low=-100, high=100, size=[P, D])
+    c = np.random.uniform(low=-np.pi, high=np.pi, size=[P, D])
+    
+    A = np.sum( u*np.sin(c)+v*np.cos(c), axis=1 )
+    B = np.sum( u*np.sin(X)+v*np.cos(X), axis=1 )
+    
+    F = (A-B)**2
+    
+    return F
 
 def Levy(X):
     # X in [-10, 10]
