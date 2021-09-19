@@ -520,6 +520,8 @@ def LevyandMontalvo1(X):
     
     return F
 
+#%%
+
 def Easom(X):
     # X in [-10, 10], D fixed 2
     # F* = -1
@@ -660,7 +662,7 @@ def InvertedCosineMixture(X):
         X = X.reshape(1, -1)
     D = X.shape[1]
 
-    F = 0.1*D - 0.1*np.sum( np.cos(5*np.pi*X), axis=1 ) - np.sum(X**2, axis=1)
+    F = 0.1*D - 0.1*np.sum( np.cos(5*np.pi*X), axis=1 ) + np.sum(X**2, axis=1)
     
     return F
 
@@ -987,7 +989,7 @@ def Colville(X):
     X3 = X[:, 2]
     X4 = X[:, 3]
     
-    F = ( 100*(X1-X2) )**2 + (1-X1)**2 + 90*(X4-X3**2)**2 + (1-X3)**2 + 10.1*( (X2-1)**2 + (X4-1)**2 ) + 19.8*(X2-1)*(X4-1)
+    F = ( 100*(X2-X1**2) )**2 + (1-X1)**2 + 90*(X4-X3**2)**2 + (1-X3)**2 + 10.1*( (X2-1)**2 + (X4-1)**2 ) + 19.8*(X2-1)*(X4-1)
     
     return F
 
@@ -1001,7 +1003,7 @@ def BartelsConn(X):
     X1 = X[:, 0]
     X2 = X[:, 1]
     
-    F = np.abs( X1**2+X2**2+X1*X2 ) + np.abs(X1) + np.abs(X2)
+    F = np.abs( X1**2+X2**2+X1*X2 ) + np.abs(np.sin(X1)) + np.abs(np.cos(X2))
     
     return F
 

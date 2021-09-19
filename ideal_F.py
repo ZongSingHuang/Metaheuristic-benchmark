@@ -119,6 +119,8 @@ def Ellipsoidal():
 def LevyandMontalvo1():
     return 0.0
 
+#%%
+
 def Easom():
     return -1.0
 

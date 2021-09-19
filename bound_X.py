@@ -110,6 +110,8 @@ def Ellipsoidal(D):
 def LevyandMontalvo1():
     return [-10, 10]
 
+#%%
+
 def Easom():
     return [-10, 10]
 
