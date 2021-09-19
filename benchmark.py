@@ -992,7 +992,7 @@ def Colville(X):
     return F
 
 def BartelsConn(X):
-    # X in [500, 500], D fixed 2
+    # X in [-500, 500], D fixed 2
     # F* = 1
     # X* = [0, 0]
     if X.ndim==1:
@@ -1006,7 +1006,7 @@ def BartelsConn(X):
     return F
 
 def Bird(X):
-    # X in [-2PI 2PI], D fixed 2
+    # X in [-2PI, 2PI], D fixed 2
     # F* = -106.7645367198034
     # X* = [4.701055751981055, 3.152946019601391], [-1.582142172055011, -3.130246799635430]
     if X.ndim==1:
