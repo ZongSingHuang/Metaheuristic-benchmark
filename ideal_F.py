@@ -111,7 +111,7 @@ def DropWave():
     return -1.0
 
 def CosineMixture(D):
-    return 0.1*D
+    return -0.1*D
 
 def Ellipsoidal():
     return 0.0

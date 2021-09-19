@@ -439,7 +439,7 @@ def Bohachevsky1(X):
     X1 = X[:, 0]
     X2 = X[:, 1]
     
-    F = X1**2 + 2*X2**2 - 0.3*np.cos(3*np.pi*X1) - np.cos(4*np.pi*X2) + 0.7
+    F = X1**2 + 2*X2**2 - 0.3*np.cos(3*np.pi*X1) - 0.4*np.cos(4*np.pi*X2) + 0.7
     
     return F
 
@@ -480,11 +480,11 @@ def CosineMixture(X):
         X = X.reshape(1, -1)
     
     f1 = 0.1 * np.sum( np.cos(5*np.pi*X), axis=1 )
-    f2 = np.sum(X, axis=1)
+    f2 = np.sum(X**2, axis=1)
     
     F = f1 - f2
     
-    return F
+    return -F
 
 def Ellipsoidal(X):
     # X in [-D, D]
@@ -496,7 +496,7 @@ def Ellipsoidal(X):
     D = X.shape[1]
     i = np.arange(D) + 1
     
-    F = np.sum(X-i, axis=1)
+    F = np.sum((X-i)**2, axis=1)
     
     return F
 
