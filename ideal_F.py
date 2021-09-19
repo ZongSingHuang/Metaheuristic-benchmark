@@ -93,7 +93,7 @@ def Michalewicz(D):
         return -9.66015
 
 def Exponential():
-    return 1.0
+    return -1.0
 
 def Schaffer():
     return 0.0

@@ -117,7 +117,7 @@ def Schwefel_P12(X):
     if X.ndim==1:
         X = X.reshape(1, -1)
 
-    F = np.sum( np.cumsum(X, axis=1) , axis=1 )
+    F = np.sum( np.cumsum(X, axis=1)**2 , axis=1 )
     
     return F
 
@@ -392,14 +392,14 @@ def Michalewicz(X, m=10):
 
 def Exponential(X):
     # X in [-1, 1]
-    # F* = 1
+    # F* = -1
     # X* = [0, 0, ..., 0]
     if X.ndim==1:
         X = X.reshape(1, -1)
     
     F = np.exp( -0.5 * np.sum( X**2, axis=1 ) )
     
-    return F
+    return -F
 
 def Schaffer(X):
     # X in [-100, 100], D fixed 2
