@@ -272,22 +272,8 @@ def fitness(P, M, N, Sequence, Cost, X, RK):
                 gantt[sequence, int(fixed_time-cost):int(fixed_time)] = job
                 gantt2[sequence, int(fixed_time-cost):int(fixed_time)] = X[i, ct]
             ct = ct + 1
-            
         
-        
-        # 重新修復
-        # dect = np.zeros(M) - 1
-        # V3_fixed = []
-        # for t in range(gantt.shape[1]):
-        #     if np.array_equal(dect, gantt[:, t])==False:
-        #         for k in range(M):
-        #             if dect[k]!=gantt[k, t] and gantt[k, t]!=-1:
-        #                 V3_fixed.append(gantt[k, t])
-                        
-        #         dect = gantt[:, t].copy()
-        # V3_fixed = np.array(V3_fixed).astype(int)
-        
-
+        # 修復
         dect = np.zeros(M) - 1
         V3_fixed = []
         X_fixed = []
