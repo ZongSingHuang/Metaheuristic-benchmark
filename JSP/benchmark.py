@@ -6,8 +6,9 @@ Created on Mon Sep 27 15:43:29 2021
 """
 
 import numpy as np
+import time
 
-def ft06(X, M, N):
+def ft06(X, M, N, RK):
     if X.ndim==1:
         X = X.reshape(1, -1)
     P = X.shape[0]
@@ -25,11 +26,11 @@ def ft06(X, M, N):
                          [2, 1, 4, 5, 0, 3],
                          [1, 3, 5, 0, 4, 2]], dtype=int)
 
-    F = fitness(P, M, N, Sequence, Cost, X)
+    X, F = fitness(P, M, N, Sequence, Cost, X, RK)
         
-    return F
+    return X, F
 
-def ft10(X, M, N):
+def ft10(X, M, N, RK):
     if X.ndim==1:
         X = X.reshape(1, -1)
     P = X.shape[0]
@@ -55,11 +56,11 @@ def ft10(X, M, N):
                          [0, 1, 3, 5, 2, 9, 6, 7, 4, 8],
                          [1, 0, 2 ,6, 8, 9, 5, 3, 4, 7]], dtype=int)
 
-    F = fitness(P, M, N, Sequence, Cost, X)
+    X, F = fitness(P, M, N, Sequence, Cost, X, RK)
         
-    return F
+    return X, F
 
-def ft20(X, M, N):
+def ft20(X, M, N, RK):
     if X.ndim==1:
         X = X.reshape(1, -1)
     P = X.shape[0]
@@ -105,11 +106,11 @@ def ft20(X, M, N):
                          [1, 2, 0, 3, 4],
                          [0, 1, 2, 3, 4]], dtype=int)
 
-    F = fitness(P, M, N, Sequence, Cost, X)
+    X, F = fitness(P, M, N, Sequence, Cost, X, RK)
         
-    return F
+    return X, F
 
-def la01(X, M, N):
+def la01(X, M, N, RK):
     if X.ndim==1:
         X = X.reshape(1, -1)
     P = X.shape[0]
@@ -135,18 +136,22 @@ def la01(X, M, N):
                          [3, 1, 4, 0, 2],
                          [4, 3, 2, 1, 0]], dtype=int)
 
-    F = fitness(P, M, N, Sequence, Cost, X)
+    X, F = fitness(P, M, N, Sequence, Cost, X, RK)
         
-    return F
+    return X, F
 
 #%%
 
-def fitness(P, M, N, Sequence, Cost, X):
-    # V3 = random_key(X, N).astype(int)
-    V3 = X.astype(int)
+def fitness(P, M, N, Sequence, Cost, X, RK):
+    if RK==True:
+        V3 = random_key(X, N).astype(int)
+    else:
+        V3 = X.astype(int)
     F = np.zeros([P])
     
     for i in range(P):
+        gantt = np.zeros([M, np.sum(Cost)]) - 1
+        gantt2 = np.zeros([M, np.sum(Cost)]) - 66666
         Machine = np.zeros([M])
         Job = np.zeros([N])
         Operation = np.zeros([N], dtype=int)
@@ -162,6 +167,8 @@ def fitness(P, M, N, Sequence, Cost, X):
         # 4, 3, 0, 1, 4, 5, 3, 5, 2, 0, 1, 4, 2, 2, 0, 5, 1, 0, 3, 1])
         # V3[i] = np.array([1, 3, 3, 1, 4, 5, 4, 3, 5, 2, 5, 3, 1, 2, 0, 2,
         # 0, 2, 0, 1, 2, 4, 3, 1, 1, 4, 0, 4, 5, 5, 2, 0, 4, 0, 3, 5])
+        # V3[i] = np.array([1, 2, 0, 2, 0, 3, 1, 2, 3, 5, 4, 1, 0, 5, 2, 5,
+        # 4, 3, 4, 2, 3, 5, 1, 0, 3, 1, 5, 4, 5, 2, 0, 3, 4, 1, 0, 4])
         # V3[i] = np.array([ 1, 2, 9,  4,  6,  6, 7, 6,  6,  4,  7,
         #                   10, 8, 4,  6,  6,  7, 5,  9, 10,  5,
         #                    5, 2, 4,  8,  3,  7, 5,  4,  4,  9,
@@ -172,7 +179,7 @@ def fitness(P, M, N, Sequence, Cost, X):
         #                   10, 9, 4,  3,  7,  1, 3,  3,  8,  8,
         #                   10, 2, 2,  1,  9,  4, 1,  8,  3,  7,
         #                   8,  3, 3,  2,  2,  4, 5, 10,  1])-1  # FT10
-        
+        ct = 0
         for job in V3[i]:
             # 初始化
             need_to_fixed = True
@@ -182,7 +189,7 @@ def fitness(P, M, N, Sequence, Cost, X):
             sequence = Sequence[job, operation]
             cost = Cost[job, operation]
             
-            # if operation==1 and sequence==0 and job==0: # 測試用
+            # if operation==0 and sequence==2 and job==4: # 測試用
             #     print(123)
             
             if Idle_len[sequence]: # 若機台編號sequence有閒置時間Idle
@@ -212,6 +219,10 @@ def fitness(P, M, N, Sequence, Cost, X):
                         
                         Job[job] = aaa[np.where(bbb==1)[0][-1]].copy() # 更新工件時間
                         
+                        # 更新甘特圖
+                        gantt[sequence, int(aaa[np.where(bbb==1)[0][0]]-1):int(aaa[np.where(bbb==1)[0][0]]-1+cost)] = job
+                        gantt2[sequence, int(aaa[np.where(bbb==1)[0][0]]-1):int(aaa[np.where(bbb==1)[0][0]]-1+cost)] = X[i, ct]
+                        
                         # 更新Idle
                         Idle_len[sequence].pop(idx)
                         Idle_st[sequence].pop(idx)
@@ -230,7 +241,6 @@ def fitness(P, M, N, Sequence, Cost, X):
                             Idle_ed[sequence].append(aaa[-1])
                             Idle_len[sequence].append(Idle_ed[sequence][-1]-Idle_st[sequence][-1])
                             
-                        # Job[job] += cost # 僅須更新Job
                         need_to_fixed = False # 不需要修正機台時間Machine及工件時間Job
                     else: # 若遮罩不存在True，代表沒有Idle可以被使用
                         Machine[sequence] += cost
@@ -257,24 +267,49 @@ def fitness(P, M, N, Sequence, Cost, X):
                 fixed_time = np.maximum(Machine[sequence], Job[job])
                 Machine[sequence] = fixed_time
                 Job[job] = fixed_time
+                
+                # 更新甘特圖
+                gantt[sequence, int(fixed_time-cost):int(fixed_time)] = job
+                gantt2[sequence, int(fixed_time-cost):int(fixed_time)] = X[i, ct]
+            ct = ct + 1
             
-            # 4. 更新甘特圖
-            # print(sequence+1)
-            # print(job+1)
-            # print(cost)
-            # print(Machine)
-            # print(Job)
-            # print(Operation)
-            # print(Idle_len)
-            # print(Idle_st)
-            # print(Idle_ed)
-            # print('-'*30)
-            # print()
+        
+        
+        # 重新修復
+        # dect = np.zeros(M) - 1
+        # V3_fixed = []
+        # for t in range(gantt.shape[1]):
+        #     if np.array_equal(dect, gantt[:, t])==False:
+        #         for k in range(M):
+        #             if dect[k]!=gantt[k, t] and gantt[k, t]!=-1:
+        #                 V3_fixed.append(gantt[k, t])
+                        
+        #         dect = gantt[:, t].copy()
+        # V3_fixed = np.array(V3_fixed).astype(int)
+        
+
+        dect = np.zeros(M) - 1
+        V3_fixed = []
+        X_fixed = []
+        for t in range(gantt.shape[1]):
+            if np.array_equal(dect, gantt[:, t])==False:
+                for k in range(M):
+                    if dect[k]!=gantt[k, t] and gantt[k, t]!=-1:
+                        V3_fixed.append(gantt[k, t])
+                        X_fixed.append(gantt2[k, t])
+                        
+                dect = gantt[:, t].copy()
+        V3_fixed = np.array(V3_fixed).astype(int)
+        X_fixed = np.array(X_fixed)
+        if RK==True:
+            X[i] = X_fixed.copy()
+        else:
+            X[i] = V3_fixed.copy()
         
         # makespan
         F[i] = Machine.max()
-    
-    return F
+        
+    return X, F
 
 def random_key(X, N):
     if X.ndim==1:
