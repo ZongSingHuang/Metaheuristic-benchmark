@@ -8,7 +8,7 @@ Created on Mon Sep 27 15:43:29 2021
 import numpy as np
 import time
 
-def ft06(X, M, N, RK):
+def ft06(X, M, N, RK, fixed):
     if X.ndim==1:
         X = X.reshape(1, -1)
     P = X.shape[0]
@@ -26,11 +26,11 @@ def ft06(X, M, N, RK):
                          [2, 1, 4, 5, 0, 3],
                          [1, 3, 5, 0, 4, 2]], dtype=int)
 
-    X, F = fitness(P, M, N, Sequence, Cost, X, RK)
+    X, F = fitness(P, M, N, Sequence, Cost, X, RK, fixed)
         
     return X, F
 
-def ft10(X, M, N, RK):
+def ft10(X, M, N, RK, fixed):
     if X.ndim==1:
         X = X.reshape(1, -1)
     P = X.shape[0]
@@ -56,11 +56,11 @@ def ft10(X, M, N, RK):
                          [0, 1, 3, 5, 2, 9, 6, 7, 4, 8],
                          [1, 0, 2 ,6, 8, 9, 5, 3, 4, 7]], dtype=int)
 
-    X, F = fitness(P, M, N, Sequence, Cost, X, RK)
+    X, F = fitness(P, M, N, Sequence, Cost, X, RK, fixed)
         
     return X, F
 
-def ft20(X, M, N, RK):
+def ft20(X, M, N, RK, fixed):
     if X.ndim==1:
         X = X.reshape(1, -1)
     P = X.shape[0]
@@ -106,11 +106,11 @@ def ft20(X, M, N, RK):
                          [1, 2, 0, 3, 4],
                          [0, 1, 2, 3, 4]], dtype=int)
 
-    X, F = fitness(P, M, N, Sequence, Cost, X, RK)
+    X, F = fitness(P, M, N, Sequence, Cost, X, RK, fixed)
         
     return X, F
 
-def la01(X, M, N, RK):
+def la01(X, M, N, RK, fixed):
     if X.ndim==1:
         X = X.reshape(1, -1)
     P = X.shape[0]
@@ -136,13 +136,13 @@ def la01(X, M, N, RK):
                          [3, 1, 4, 0, 2],
                          [4, 3, 2, 1, 0]], dtype=int)
 
-    X, F = fitness(P, M, N, Sequence, Cost, X, RK)
+    X, F = fitness(P, M, N, Sequence, Cost, X, RK, fixed)
         
     return X, F
 
 #%%
 
-def fitness(P, M, N, Sequence, Cost, X, RK):
+def fitness(P, M, N, Sequence, Cost, X, RK, fixed):
     if RK==True:
         V3 = random_key(X, N).astype(int)
     else:
@@ -274,23 +274,24 @@ def fitness(P, M, N, Sequence, Cost, X, RK):
             ct = ct + 1
         
         # 修復
-        dect = np.zeros(M) - 1
-        V3_fixed = []
-        X_fixed = []
-        for t in range(gantt.shape[1]):
-            if np.array_equal(dect, gantt[:, t])==False:
-                for k in range(M):
-                    if dect[k]!=gantt[k, t] and gantt[k, t]!=-1:
-                        V3_fixed.append(gantt[k, t])
-                        X_fixed.append(gantt2[k, t])
-                        
-                dect = gantt[:, t].copy()
-        V3_fixed = np.array(V3_fixed).astype(int)
-        X_fixed = np.array(X_fixed)
-        if RK==True:
-            X[i] = X_fixed.copy()
-        else:
-            X[i] = V3_fixed.copy()
+        if fixed==True:
+            dect = np.zeros(M) - 1
+            V3_fixed = []
+            X_fixed = []
+            for t in range(gantt.shape[1]):
+                if np.array_equal(dect, gantt[:, t])==False:
+                    for k in range(M):
+                        if dect[k]!=gantt[k, t] and gantt[k, t]!=-1:
+                            V3_fixed.append(gantt[k, t])
+                            X_fixed.append(gantt2[k, t])
+                            
+                    dect = gantt[:, t].copy()
+            V3_fixed = np.array(V3_fixed).astype(int)
+            X_fixed = np.array(X_fixed)
+            if RK==True:
+                X[i] = X_fixed.copy()
+            else:
+                X[i] = V3_fixed.copy()
         
         # makespan
         F[i] = Machine.max()
