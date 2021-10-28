@@ -6,147 +6,139 @@ Created on Mon Sep 27 15:43:29 2021
 """
 
 import numpy as np
-import time
+import pandas as pd
+import plotly_express as px
+import plotly.io as pio
+from datetime import datetime
+# pio.renderers.default = 'svg'
+pio.renderers.default = 'browser'
 
-def ft06(X, M, N, RK, fixed):
+def fitness(X, M, N, Sequence, Cost):
     if X.ndim==1:
         X = X.reshape(1, -1)
-    P = X.shape[0]
-    
-    Cost = np.array([[1, 3, 6, 7, 3, 6],
-                     [8, 5, 10, 10, 10, 4],
-                     [5, 4,  8,  9,  1, 7],
-                     [5, 5,  5,  3,  8, 9],
-                     [9, 3,  5,  4,  3, 1],
-                     [3, 3,  9, 10,  4, 1]])
-    Sequence = np.array([[2, 0, 1, 3, 5, 4],
-                         [1, 2, 4, 5, 0, 3],
-                         [2, 3, 5, 0, 1, 4],
-                         [1, 0, 2, 3, 4, 5],
-                         [2, 1, 4, 5, 0, 3],
-                         [1, 3, 5, 0, 4, 2]], dtype=int)
-
-    X, F = fitness(P, M, N, Sequence, Cost, X, RK, fixed)
         
-    return X, F
+    P = X.shape[0]
+    X = X.astype(int)
+    F = np.zeros([P])
+    
+    for i in range(P):
+        Machine = np.zeros([M])
+        Job = np.zeros([N])
+        Operation = np.zeros([N], dtype=int)
+        
+        for job in X[i]:
+            # 1. 取得Job的Operation之工時與機台
+            operation = Operation[job]
+            sequence = Sequence[job, operation]
+            cost = Cost[job, operation]
+            
+            # 2. 更新時間與次數
+            Machine[sequence] += cost
+            Job[job] += cost
+            Operation[job] += 1
+            
+            # 3. 修正時間
+            fixed_time = np.maximum(Machine[sequence], Job[job])
+            Machine[sequence] = fixed_time
+            Job[job] = fixed_time
+            
+            # 4. 更新甘特圖
+        
+        # makespan
+        F[i] = Machine.max()
+        
+    return F
 
-def ft10(X, M, N, RK, fixed):
+def random_key(X, N):
     if X.ndim==1:
         X = X.reshape(1, -1)
+
     P = X.shape[0]
+    D = X.shape[1]
+    V3 = np.zeros_like(X)
+    cont = np.zeros([3, D])
     
-    Cost = np.array([[29, 78,  9, 36, 49, 11, 62, 56, 44, 21],
-                     [43, 90, 75, 11, 69, 28, 46, 46, 72, 30],
-                     [91, 85, 39, 74, 90, 10, 12, 89, 45, 33],
-                     [81, 95, 71, 99,  9, 52, 85, 98, 22, 43],
-                     [14,  6, 22, 61, 26, 69, 21, 49, 72, 53],
-                     [84,  2, 52, 95, 48, 72, 47, 65,  6, 25],
-                     [46, 37, 61, 13, 32, 21, 32, 89, 30, 55],
-                     [31, 86, 46, 74, 32, 88, 19, 48, 36, 79],
-                     [76, 69, 76, 51, 85, 11, 40, 89, 26, 74],
-                     [85, 13, 61,  7, 64, 76, 47, 52, 90, 45]])
-    Sequence = np.array([[0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-                         [0, 2, 4, 9, 3, 1, 6, 5, 7, 8],
-                         [1, 0, 3, 2, 8, 5, 7, 6, 9, 4],
-                         [1, 2, 0, 4, 6, 8, 7, 3, 9, 5],
-                         [2, 0, 1, 5, 3, 4, 8, 7, 9, 6],
-                         [2, 1, 5, 3, 8, 9, 0, 6, 4, 7],
-                         [1, 0, 3, 2, 6, 5, 9, 8, 7, 4], 
-                         [2, 0, 1, 5, 4, 6, 8, 9, 7, 3],
-                         [0, 1, 3, 5, 2, 9, 6, 7, 4, 8],
-                         [1, 0, 2 ,6, 8, 9, 5, 3, 4, 7]], dtype=int)
-
-    X, F = fitness(P, M, N, Sequence, Cost, X, RK, fixed)
+    for i in range(P):
+        cont[0] = np.arange(D)
+        cont[1] = X[i].copy()
         
-    return X, F
+        idx = X[i].argsort()
+        cont = cont[:, idx]
+        
+        cont[2] = np.arange(D) + 1
+        
+        idx = cont[0].argsort()
+        cont = cont[:, idx]
+        
+        V3[i] = cont[2] % N
+    
+    V3.astype(int)
+    return V3
 
-def ft20(X, M, N, RK, fixed):
+def convert_to_datetime(x):
+  return pd.to_datetime(x, unit='D')
+
+def gantt(X, M, N, Sequence, Cost):
+    if X.ndim!=1:
+        X = X.reshape(-1)
+        
+    X = X.astype(int)
+    Data = pd.DataFrame(columns=['Job', 'Operation', 'Machine', 'Start', 'Cost', 'End'])
+    Machine = np.zeros([M])
+    Job = np.zeros([N])
+    Operation = np.zeros([N], dtype=int)
+    
+    for idx, job in enumerate(X):
+        # 1. 取得Job的Operation之工時與機台
+        operation = Operation[job]
+        sequence = Sequence[job, operation]
+        cost = Cost[job, operation]
+        
+        # 2. 更新時間與次數
+        Machine[sequence] += cost
+        Job[job] += cost
+        Operation[job] += 1
+        
+        # 3. 修正時間
+        fixed_time = np.maximum(Machine[sequence], Job[job])
+        Machine[sequence] = fixed_time
+        Job[job] = fixed_time
+        
+        # 4. 寫入表
+        Data.loc[-1] = [job+1, Operation[job], sequence+1,
+                        convert_to_datetime(fixed_time-cost),
+                        convert_to_datetime(cost),
+                        convert_to_datetime(fixed_time)]
+        Data.index = Data.index + 1
+        Data = Data.sort_index()
+        
+    # 5. 更新甘特圖
+    # Data['delta'] = Data['End'] - Data['Start']
+    fig = px.timeline(Data,
+                      x_start='Start',
+                      x_end='End',
+                      y='Machine',
+                      color='Job')
+    fig.update_yaxes(autorange="reversed")
+    num_tick_labels = np.linspace(start = 0, stop = 30, num = 31, dtype = int)
+    date_ticks = [convert_to_datetime(x) for x in num_tick_labels]
+    fig.layout.xaxis.update({
+            'tickvals' : date_ticks,
+            'ticktext' : num_tick_labels
+            })
+    # fig.layout.xaxis.type = 'linear'
+    # fig.data[0].x = Data.delta.tolist()
+    f = fig.full_figure_for_development(warn=False)
+    
+    fig.show()
+    return 0
+
+def fitness2(X, M, N, Sequence, Cost):
     if X.ndim==1:
         X = X.reshape(1, -1)
-    P = X.shape[0]
-    
-    Cost = np.array([[29,  9, 49, 62, 44],
-                     [43, 75, 69, 46, 72],
-                     [91, 39, 90, 12, 45],
-                     [81, 71,  9, 85, 22],
-                     [14, 22, 26, 21, 72],
-                     [84, 52, 48, 47,  6],
-                     [46, 61, 32, 32, 30], 
-                     [31, 46, 32, 19, 36],
-                     [76, 76, 85, 40, 26],
-                     [85, 61, 64, 47, 90],
-                     [78, 36, 11, 56, 21],
-                     [90, 11, 28, 46, 30],
-                     [85, 74, 10, 89, 33],
-                     [95, 99, 52, 98, 43],
-                     [ 6, 61, 69, 49, 53],
-                     [ 2, 95, 72, 65, 25],
-                     [37, 13, 21, 89, 55],
-                     [86, 74, 88, 48, 79],
-                     [69, 51, 11, 89, 74],
-                     [13, 7, 76, 52, 45]])
-    Sequence = np.array([[0, 1, 2, 3, 4],
-                         [0, 1, 3, 2, 4],
-                         [1, 0, 2, 4, 3],
-                         [1, 0, 4, 2, 3],
-                         [2, 1, 0, 3, 4],
-                         [2, 1, 4, 0, 3],
-                         [1, 0, 2, 3, 4], 
-                         [2, 1, 0, 3, 4],
-                         [0, 3, 2, 1, 4],
-                         [1, 2, 0, 3, 4],
-                         [1, 3, 0, 4, 2],
-                         [2, 0, 1, 3, 4],
-                         [0, 2, 1, 3, 4],
-                         [2, 0, 1, 3, 4],
-                         [0, 1, 4, 2, 3],
-                         [1, 0, 3, 4, 2],
-                         [0, 2, 1, 3, 4],
-                         [0, 1, 4, 2, 3],
-                         [1, 2, 0, 3, 4],
-                         [0, 1, 2, 3, 4]], dtype=int)
-
-    X, F = fitness(P, M, N, Sequence, Cost, X, RK, fixed)
         
-    return X, F
-
-def la01(X, M, N, RK, fixed):
-    if X.ndim==1:
-        X = X.reshape(1, -1)
     P = X.shape[0]
-    
-    Cost = np.array([[21, 53, 95, 55, 34],
-                     [21, 52, 16, 26, 71],
-                     [39, 98, 42, 31, 12],
-                     [77, 55, 79, 66, 77],
-                     [83, 34, 64, 19, 37],
-                     [54, 43, 79, 92, 62],
-                     [69, 77, 87, 87, 93],
-                     [38, 60, 41, 24, 83],
-                     [17, 49, 25, 44, 98],
-                     [77, 79, 43, 75, 96]])
-    Sequence = np.array([[1, 0, 4, 3, 2],
-                         [0, 3, 4, 2, 1],
-                         [3, 4, 1, 2, 0],
-                         [1, 0, 4, 2, 3],
-                         [0, 3, 2, 1, 4],
-                         [1, 2, 4, 0, 3],
-                         [3, 4, 1, 2, 0],
-                         [2, 0, 1, 3, 4],
-                         [3, 1, 4, 0, 2],
-                         [4, 3, 2, 1, 0]], dtype=int)
-
-    X, F = fitness(P, M, N, Sequence, Cost, X, RK, fixed)
-        
-    return X, F
-
-#%%
-
-def fitness(P, M, N, Sequence, Cost, X, RK, fixed):
-    if RK==True:
-        V3 = random_key(X, N).astype(int)
-    else:
-        V3 = X.astype(int)
+    X = X.astype(int)
     F = np.zeros([P])
     
     for i in range(P):
@@ -159,28 +151,8 @@ def fitness(P, M, N, Sequence, Cost, X, RK, fixed):
         Idle_st = [[] for i in range(M)]
         Idle_ed = [[] for i in range(M)]
         
-        # V3[i] = np.array([0, 1, 0, 3, 3, 2, 3, 5, 4, 0, 4, 3, 4, 5, 5, 1,
-        # 1, 2, 1, 5, 5, 3, 0, 0, 2, 1, 4, 4, 2, 2, 1, 4, 3, 2, 0, 5])
-        # V3[i] = np.array([3, 3, 1, 5, 2, 3, 4, 5, 0, 0, 4, 4, 0, 3, 5, 0, 2,
-        # 0, 4, 2, 1, 1, 5, 5, 2, 0, 2, 3, 1, 5, 2, 4, 1, 1, 4, 3])
-        # V3[i] = np.array([0, 4, 5, 2, 3, 1, 3, 4, 1, 4, 2, 3, 0, 2, 5, 5,
-        # 4, 3, 0, 1, 4, 5, 3, 5, 2, 0, 1, 4, 2, 2, 0, 5, 1, 0, 3, 1])
-        # V3[i] = np.array([1, 3, 3, 1, 4, 5, 4, 3, 5, 2, 5, 3, 1, 2, 0, 2,
-        # 0, 2, 0, 1, 2, 4, 3, 1, 1, 4, 0, 4, 5, 5, 2, 0, 4, 0, 3, 5])
-        # V3[i] = np.array([1, 2, 0, 2, 0, 3, 1, 2, 3, 5, 4, 1, 0, 5, 2, 5,
-        # 4, 3, 4, 2, 3, 5, 1, 0, 3, 1, 5, 4, 5, 2, 0, 3, 4, 1, 0, 4])
-        # V3[i] = np.array([ 1, 2, 9,  4,  6,  6, 7, 6,  6,  4,  7,
-        #                   10, 8, 4,  6,  6,  7, 5,  9, 10,  5,
-        #                    5, 2, 4,  8,  3,  7, 5,  4,  4,  9,
-        #                    6, 3, 8, 10, 10,  1, 5,  2,  9,  7,
-        #                   10, 9, 5,  7,  7,  4, 6,  8,  2,  6,
-        #                    3, 1, 3,  1,  5,  9, 9,  6,  8,  2,
-        #                    1, 8, 5,  7, 10, 10, 1,  2,  9,  5,
-        #                   10, 9, 4,  3,  7,  1, 3,  3,  8,  8,
-        #                   10, 2, 2,  1,  9,  4, 1,  8,  3,  7,
-        #                   8,  3, 3,  2,  2,  4, 5, 10,  1])-1  # FT10
         ct = 0
-        for job in V3[i]:
+        for job in X[i]:
             # 初始化
             need_to_fixed = True
             
@@ -274,55 +246,22 @@ def fitness(P, M, N, Sequence, Cost, X, RK, fixed):
             ct = ct + 1
         
         # 修復
-        if fixed==True:
-            dect = np.zeros(M) - 1
-            V3_fixed = []
-            X_fixed = []
-            for t in range(gantt.shape[1]):
-                if np.array_equal(dect, gantt[:, t])==False:
-                    for k in range(M):
-                        if dect[k]!=gantt[k, t] and gantt[k, t]!=-1:
-                            V3_fixed.append(gantt[k, t])
-                            X_fixed.append(gantt2[k, t])
-                            
-                    dect = gantt[:, t].copy()
-            V3_fixed = np.array(V3_fixed).astype(int)
-            X_fixed = np.array(X_fixed)
-            if RK==True:
-                X[i] = X_fixed.copy()
-            else:
-                X[i] = V3_fixed.copy()
+        dect = np.zeros(M) - 1
+        V3_fixed = []
+        X_fixed = []
+        for t in range(gantt.shape[1]):
+            if np.array_equal(dect, gantt[:, t])==False:
+                for k in range(M):
+                    if dect[k]!=gantt[k, t] and gantt[k, t]!=-1:
+                        V3_fixed.append(gantt[k, t])
+                        X_fixed.append(gantt2[k, t])
+                        
+                dect = gantt[:, t].copy()
+        V3_fixed = np.array(V3_fixed).astype(int)
+        X_fixed = np.array(X_fixed)
+        X[i] = V3_fixed.copy()
         
         # makespan
         F[i] = Machine.max()
         
     return X, F
-
-def random_key(X, N):
-    if X.ndim==1:
-        X = X.reshape(1, -1)
-    # N = 3
-    # X = np.array([[1.3, 0.7, 2.4, 1.1, 3.4, 5.3],
-    #               [0.7, 2.4, 1.3, 1.1, 3.4, 5.3],
-    #               [3.7, 1.1, 2.3, 4.6, 6.5, 5.1]])
-    P = X.shape[0]
-    D = X.shape[1]
-    V3 = np.zeros_like(X)
-    cont = np.zeros([3, D])
-    
-    for i in range(P):
-        cont[0] = np.arange(D)
-        cont[1] = X[i].copy()
-        
-        idx = X[i].argsort()
-        cont = cont[:, idx]
-        
-        cont[2] = np.arange(D) + 1
-        
-        idx = cont[0].argsort()
-        cont = cont[:, idx]
-        
-        V3[i] = cont[2] % N
-    
-    V3.astype(int)
-    return V3

@@ -5,6 +5,9 @@ Created on Fri Oct  1 23:42:10 2021
 @author: ZongSing_NB2
 """
 
+def test():
+    return 4
+
 def ft06():
     return 6
 

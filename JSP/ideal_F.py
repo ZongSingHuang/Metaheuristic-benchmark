@@ -5,6 +5,9 @@ Created on Mon Oct  4 11:27:25 2021
 @author: zongsing.huang
 """
 
+def test():
+    return 21
+
 def ft06():
     return 55
 
