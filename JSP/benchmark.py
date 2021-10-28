@@ -120,7 +120,7 @@ def gantt(X, M, N, Sequence, Cost):
                       y='Machine',
                       color='Job')
     fig.update_yaxes(autorange="reversed")
-    num_tick_labels = np.linspace(start = 0, stop = 30, num = 31, dtype = int)
+    num_tick_labels = np.linspace(start = 0, stop = int(Machine.max()), num = int(Machine.max()+1), dtype = int)
     date_ticks = [convert_to_datetime(x) for x in num_tick_labels]
     fig.layout.xaxis.update({
             'tickvals' : date_ticks,
