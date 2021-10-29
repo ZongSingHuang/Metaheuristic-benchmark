@@ -9,7 +9,6 @@ import numpy as np
 import pandas as pd
 import plotly_express as px
 import plotly.io as pio
-from datetime import datetime
 # pio.renderers.default = 'svg'
 pio.renderers.default = 'browser'
 
@@ -105,7 +104,7 @@ def gantt(X, M, N, Sequence, Cost):
         Job[job] = fixed_time
         
         # 4. 寫入表
-        Data.loc[-1] = [job+1, Operation[job], sequence+1,
+        Data.loc[-1] = [job+1, Operation[job], str(sequence+1),
                         convert_to_datetime(fixed_time-cost),
                         convert_to_datetime(cost),
                         convert_to_datetime(fixed_time)]
@@ -113,22 +112,12 @@ def gantt(X, M, N, Sequence, Cost):
         Data = Data.sort_index()
         
     # 5. 更新甘特圖
-    # Data['delta'] = Data['End'] - Data['Start']
-    fig = px.timeline(Data,
-                      x_start='Start',
-                      x_end='End',
-                      y='Machine',
-                      color='Job')
-    fig.update_yaxes(autorange="reversed")
+    fig = px.timeline(Data, x_start="Start", x_end="End", y="Machine", color='Job')
+    fig.update_yaxes(autorange="reversed") # otherwise tasks are listed from the bottom up
     num_tick_labels = np.linspace(start = 0, stop = int(Machine.max()), num = int(Machine.max()+1), dtype = int)
     date_ticks = [convert_to_datetime(x) for x in num_tick_labels]
-    fig.layout.xaxis.update({
-            'tickvals' : date_ticks,
-            'ticktext' : num_tick_labels
-            })
-    # fig.layout.xaxis.type = 'linear'
-    # fig.data[0].x = Data.delta.tolist()
-    f = fig.full_figure_for_development(warn=False)
+    fig.layout.xaxis.update({'tickvals' : date_ticks,
+                             'ticktext' : num_tick_labels})
     
     fig.show()
     return 0
