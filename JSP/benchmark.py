@@ -19,13 +19,18 @@ def fitness(X, M, N, Sequence, Cost):
     P = X.shape[0]
     X = X.astype(int)
     F = np.zeros([P])
+    critical_path = []
     
     for i in range(P):
         Machine = np.zeros([M])
         Job = np.zeros([N])
         Operation = np.zeros([N], dtype=int)
+        list_start = {}
+        list_end = {}
         
-        for job in X[i]:
+        # X[i] = np.array([2, 3, 2, 1, 1, 4, 4, 3, 4, 2, 3, 1, 3, 1, 2, 4], dtype=int) - 1
+        
+        for idx, job in enumerate(X[i]):
             # 1. 取得Job的Operation之工時與機台
             operation = Operation[job]
             sequence = Sequence[job, operation]
@@ -42,11 +47,48 @@ def fitness(X, M, N, Sequence, Cost):
             Job[job] = fixed_time
             
             # 4. 更新甘特圖
-        
-        # makespan
+            list_start[idx] = fixed_time - cost
+            list_end[idx] = fixed_time
+            
+        # 5. makespan
         F[i] = Machine.max()
+
+        # 6. 關鍵路徑
+        critical_path.append(CPM(list_start, list_end, F[i]))
         
-    return F
+    return F, critical_path
+
+def CPM(list_start, list_end, makespan):
+    tree = []
+    copy_list_end = list_end.copy()
+    for idx, val in copy_list_end.items():
+        if val==makespan:
+            node = {}
+            node[int(idx)] = list_start[int(idx)]
+            tree.append(node)
+            del list_start[int(idx)]
+            del list_end[int(idx)]
+    del copy_list_end
+    
+    for branch_idx, branch in enumerate(tree):
+        end_of_branch = branch[list(branch)[-1]]
+        
+        for leaf_idx, leaf_val in list_end.items():
+            if leaf_val==end_of_branch:
+                node_val = list_start[leaf_idx]
+                node_idx = leaf_idx
+                copy_branch = branch.copy()
+                copy_branch[int(node_idx)] = node_val
+                tree.append(copy_branch)
+    
+    critical_path = []
+    for idx, branch in enumerate(tree):
+        end_of_branch = branch[list(branch)[-1]]
+        if end_of_branch==0:
+            critical_path += list(branch)
+    critical_path = list(set(critical_path))
+    
+    return critical_path
 
 def random_key(X, N):
     if X.ndim==1:
@@ -87,7 +129,7 @@ def gantt(X, M, N, Sequence, Cost):
     Job = np.zeros([N])
     Operation = np.zeros([N], dtype=int)
     
-    for idx, job in enumerate(X):
+    for job in X:
         # 1. 取得Job的Operation之工時與機台
         operation = Operation[job]
         sequence = Sequence[job, operation]
@@ -113,11 +155,11 @@ def gantt(X, M, N, Sequence, Cost):
         
     # 5. 更新甘特圖
     fig = px.timeline(Data, x_start="Start", x_end="End", y="Machine", color='Job')
-    fig.update_yaxes(autorange="reversed") # otherwise tasks are listed from the bottom up
     num_tick_labels = np.linspace(start = 0, stop = int(Machine.max()), num = int(Machine.max()+1), dtype = int)
     date_ticks = [convert_to_datetime(x) for x in num_tick_labels]
     fig.layout.xaxis.update({'tickvals' : date_ticks,
                              'ticktext' : num_tick_labels})
+    fig.update_yaxes(autorange="reversed") # otherwise tasks are listed from the bottom up
     
     fig.show()
     return 0
