@@ -154,6 +154,7 @@ def gantt(X, M, N, Sequence, Cost):
         Data = Data.sort_index()
         
     # 5. 更新甘特圖
+	Data = Data.sort_values(by=['Machine'])
     fig = px.timeline(Data, x_start="Start", x_end="End", y="Machine", color='Job')
     num_tick_labels = np.linspace(start = 0, stop = int(Machine.max()), num = int(Machine.max()+1), dtype = int)
     date_ticks = [convert_to_datetime(x) for x in num_tick_labels]
