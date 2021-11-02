@@ -19,3 +19,9 @@ def ft20():
 
 def la01():
     return 666
+
+def la02():
+    return 655
+
+def la03():
+    return 597

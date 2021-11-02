@@ -19,3 +19,9 @@ def ft20():
 
 def la01():
     return 10
+
+def la02():
+    return 10
+
+def la03():
+    return 10
