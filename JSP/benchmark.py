@@ -85,8 +85,19 @@ def CPM(list_start, list_end, makespan):
     for idx, branch in enumerate(tree):
         end_of_branch = branch[list(branch)[-1]]
         if end_of_branch==0:
-            critical_path += list(branch)
-    critical_path = list(set(critical_path))
+            # 取短
+            if len(list(branch))<len(critical_path) or len(critical_path)==0:
+                critical_path = list(branch)
+            
+            # # 取長
+            # if len(list(branch))>len(critical_path) or len(critical_path)==0:
+            #     critical_path = list(branch)
+            
+        #     # 全都要
+        #     critical_path += list(branch)
+        
+        # # 全都要
+        # critical_path = list(set(critical_path))
     
     return critical_path
 
